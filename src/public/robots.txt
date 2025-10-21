@@ -1,0 +1,25 @@
+# robots.txt - Titah
+# Contrôle l'indexation des moteurs de recherche
+
+# Autoriser tous les robots
+User-agent: *
+Allow: /
+
+# Pages à ne pas indexer
+Disallow: /admin/
+Disallow: /api/
+Disallow: /politique-confidentialite
+Disallow: /gestion-cookies
+
+# Sitemap
+Sitemap: https://titah.fr/sitemap.xml
+
+# Crawl-delay (optionnel, pour limiter la charge serveur)
+# Crawl-delay: 10
+
+# Robots spécifiques (optionnel)
+# User-agent: Googlebot
+# Allow: /
+
+# User-agent: Bingbot
+# Allow: /
