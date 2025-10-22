@@ -9,6 +9,8 @@
 
 ### ✅ 1. Protection de l'Interface Admin
 
+> ℹ️ Les composants `AdminPage.tsx` / `AdminLogin.tsx` ne sont pas présents dans cette version du bundle. Les notes ci-dessous restent valables si vous décidez de réintroduire une interface d'administration côté frontend.
+
 **Fichier créé:** `/components/AdminLogin.tsx`  
 **Fichier modifié:** `/components/AdminPage.tsx`
 
@@ -56,53 +58,36 @@ User clique sur "•" → AdminLogin → Mot de passe → AdminPage → Données
 
 ---
 
-### ⚠️ 2. Ce qui N'EST PAS encore sécurisé
+### ✅ 2. Sécurisation du backend Supabase
 
-#### 🔴 Endpoints API toujours publics
+**Fichiers modifiés :**  
+- `/src/supabase/functions/server/index.tsx`  
+- `/src/supabase/functions/server/rate-limiter.ts` *(nouveau)*  
+- `/src/supabase/functions/server/kv_store.tsx`
 
-Les routes suivantes sont **encore accessibles sans authentification:**
+#### Mesures implémentées
+1. **Authentification des routes admin**
+   - Vérification obligatoire de l’en-tête `Authorization: Bearer <ADMIN_SECRET_TOKEN>`
+   - Retour `401` en cas d’absence ou de jeton invalide
+   - Log serveur si le secret n’est pas configuré
 
-```bash
-# N'importe qui peut faire:
-curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts \
-  -H "Authorization: Bearer eyJhbGci..."
-  
-# Et obtenir TOUS les contacts! ❌
-```
+2. **Restriction CORS**
+   - Liste blanche (`localhost`, `127.0.0.1:5173/5174`, + domaines définis via `ALLOWED_ORIGINS`)
+   - Blocage explicite des origines non autorisées (`403`)
 
-**Pourquoi?**  
-Le backend (`/supabase/functions/server/index.tsx`) ne vérifie PAS l'authentification.
+3. **Rate limiting**
+   - Création d’un module en mémoire (`rate-limiter.ts`)
+   - 5 requêtes par heure et par IP (paramétrable)
+   - Réponse `429` en cas d’abus
 
-**Solution requise:**  
-Voir section "Prochaines étapes" ci-dessous.
+4. **Anonymisation RGPD**
+   - Suppression du stockage d’adresse IP
+   - Conservation uniquement du `userAgent`
 
----
-
-#### 🔴 Pas de rate limiting
-
-Un attaquant peut toujours:
-- Spammer le formulaire 1000x par seconde
-- Remplir la base de données
-- Augmenter les coûts Supabase
-
-**Solution requise:**  
-Voir section "Prochaines étapes" ci-dessous.
-
----
-
-#### 🔴 IP toujours stockée (RGPD)
-
-Le backend enregistre toujours:
-```typescript
-metadata: {
-  ip: c.req.header("x-forwarded-for") || "unknown", // ⚠️ RGPD
-}
-```
-
-Sans consentement explicite = non-conforme RGPD.
-
-**Solution requise:**  
-Voir section "Prochaines étapes" ci-dessous.
+5. **Nettoyage de la configuration**
+   - Variables d’environnement Vite (`VITE_SUPABASE_*`) pour la configuration frontend
+   - Script `scripts/set_supabase_secrets.sh` pour pousser les secrets Supabase (`ADMIN_SECRET_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ALLOWED_ORIGINS`)
+   - Documentation mise à jour (`README.md`, `DEPLOYMENT_GUIDE.md`, `.env.example`)
 
 ---
 
@@ -111,9 +96,9 @@ Voir section "Prochaines étapes" ci-dessous.
 | Vulnérabilité | Avant | Maintenant | Production |
 |---------------|-------|------------|------------|
 | **Accès Admin frontend** | ❌ Ouvert | ✅ Protégé | ⚠️ Auth basique |
-| **Endpoints API** | ❌ Publics | ❌ Publics | ❌ Non sécurisé |
-| **Rate Limiting** | ❌ Aucun | ❌ Aucun | ❌ Requis |
-| **Stockage IP (RGPD)** | ❌ Oui | ❌ Oui | ❌ Non-conforme |
+| **Endpoints API** | ❌ Publics | ✅ Jeton requis | ⚠️ Prévoir Auth Supabase |
+| **Rate Limiting** | ❌ Aucun | ✅ 5 req/h par IP | ⚠️ Adapter si trafic élevé |
+| **Stockage IP (RGPD)** | ❌ Oui | ✅ Retiré | ✅ Conforme |
 | **XSS Protection** | ✅ React | ✅ React | ✅ OK |
 | **Validation Inputs** | ✅ Double | ✅ Double | ✅ OK |
 | **Messages d'erreur** | ✅ Génériques | ✅ Génériques | ✅ OK |
@@ -158,185 +143,34 @@ L'authentification basique est suffisante pour:
 
 ### 🔴 PRIORITÉ 1 - CRITIQUE (Avant production)
 
-#### 1.1 Sécuriser les endpoints backend
+#### 1.1 Générer et distribuer le `ADMIN_SECRET_TOKEN`
+- Créer un secret robuste (ex. `openssl rand -hex 48`).
+- Exporter les variables puis exécuter `./scripts/set_supabase_secrets.sh`.
+- Vérifier dans le dashboard Supabase → *Project Settings → Secrets* que `ADMIN_SECRET_TOKEN`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ALLOWED_ORIGINS` sont bien définis.
+- Redéployer la fonction : `supabase functions deploy make-server-2fc91c13`.
 
-**Fichier:** `/supabase/functions/server/index.tsx`
+#### 1.2 Mettre à jour les clients admin
+- Toute application (console interne, script CLI, future interface React) qui consomme `/contacts` ou `/contacts/stats` doit envoyer l’en-tête `Authorization: Bearer <ADMIN_SECRET_TOKEN>`.
+- Conserver le token côté serveur uniquement (ne pas l’exposer côté navigateur public).
+- Si besoin, créer une petite CLI interne :
+  ```bash
+  curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts \
+    -H "Authorization: Bearer $ADMIN_SECRET_TOKEN"
+  ```
 
-**Créer variable d'environnement:**
-```env
-ADMIN_SECRET_TOKEN=un_token_très_long_et_secret_généré_aléatoirement_123456789
-```
-
-**Ajouter fonction de vérification:**
-```typescript
-// Ajouter en haut du fichier
-const verifyAdminToken = (authHeader: string | undefined): boolean => {
-  const adminToken = Deno.env.get("ADMIN_SECRET_TOKEN");
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return false;
-  }
-  
-  const token = authHeader.split(' ')[1];
-  return token === adminToken;
-};
-```
-
-**Protéger les routes:**
-```typescript
-app.get("/make-server-2fc91c13/contacts", async (c) => {
-  // ✅ NOUVEAU: Vérification
-  if (!verifyAdminToken(c.req.header('Authorization'))) {
-    return c.json({ error: "Non autorisé" }, 401);
-  }
-  
-  // ... reste du code
-});
-
-app.get("/make-server-2fc91c13/contacts/stats", async (c) => {
-  // ✅ NOUVEAU: Vérification
-  if (!verifyAdminToken(c.req.header('Authorization'))) {
-    return c.json({ error: "Non autorisé" }, 401);
-  }
-  
-  // ... reste du code
-});
-```
-
-**Modifier AdminPage pour envoyer le token:**
-```typescript
-// Dans fetchData()
-const contactsResponse = await fetch(
-  `https://${projectId}.supabase.co/functions/v1/make-server-2fc91c13/contacts`,
-  {
-    headers: {
-      'Authorization': `Bearer ${Deno.env.get("ADMIN_SECRET_TOKEN")}`, // ✅ Token secret
-    },
-  }
-);
-```
-
-**Temps estimé:** 1-2 heures
-
----
-
-#### 1.2 Ajouter Rate Limiting
-
-**Créer fichier:** `/supabase/functions/server/rate-limiter.ts`
-
-```typescript
-// Map pour stocker les tentatives par IP
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-// Nettoyer les anciennes entrées toutes les heures
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, data] of rateLimitMap.entries()) {
-    if (now > data.resetTime) {
-      rateLimitMap.delete(ip);
-    }
-  }
-}, 3600000); // 1 heure
-
-export const checkRateLimit = (
-  ip: string, 
-  maxRequests: number = 5, 
-  windowMs: number = 3600000
-): boolean => {
-  const now = Date.now();
-  const record = rateLimitMap.get(ip);
-  
-  if (!record || now > record.resetTime) {
-    // Première requête ou fenêtre expirée
-    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
-    return true;
-  }
-  
-  if (record.count >= maxRequests) {
-    // Limite atteinte
-    return false;
-  }
-  
-  // Incrémenter le compteur
-  record.count++;
-  return true;
-};
-```
-
-**Utiliser dans le backend:**
-```typescript
-import { checkRateLimit } from './rate-limiter.ts';
-
-app.post("/make-server-2fc91c13/contact", async (c) => {
-  const ip = c.req.header("x-forwarded-for") || c.req.header("x-real-ip") || "unknown";
-  
-  // ✅ Vérifier le rate limit (5 soumissions par heure)
-  if (!checkRateLimit(ip, 5, 3600000)) {
-    console.log(`Rate limit exceeded for IP: ${ip}`);
-    return c.json({ 
-      error: "Trop de demandes. Veuillez réessayer dans 1 heure." 
-    }, 429);
-  }
-  
-  // ... reste du code
-});
-```
-
-**Temps estimé:** 2-3 heures
-
----
-
-#### 1.3 Retirer ou hasher l'IP (RGPD)
-
-**Option A: Retirer complètement (Recommandé)**
-```typescript
-// Supprimer ces lignes
-metadata: {
-  userAgent: c.req.header("user-agent") || "unknown",
-  // ip: c.req.header("x-forwarded-for") || "unknown", // ❌ RETIRÉ
-}
-```
-
-**Option B: Hasher l'IP**
-```typescript
-import { crypto } from "node:crypto";
-
-const hashIp = (ip: string): string => {
-  return crypto.createHash('sha256')
-    .update(ip + Deno.env.get("IP_HASH_SALT")) // Salt secret
-    .digest('hex')
-    .substring(0, 16);
-};
-
-// Utiliser
-metadata: {
-  userAgent: c.req.header("user-agent") || "unknown",
-  ipHash: hashIp(c.req.header("x-forwarded-for") || "unknown"), // ✅ Hash anonyme
-}
-```
-
-**Ajouter dans la politique de confidentialité:**
-> Nous collectons votre adresse IP de manière anonymisée (hashée) à des fins de 
-> sécurité et de prévention du spam. Cette donnée ne permet pas de vous identifier.
-
-**Temps estimé:** 30 minutes
+#### 1.3 Peaufiner la configuration CORS / rate limiting
+- Ajuster `ALLOWED_ORIGINS` pour n’autoriser que vos domaines (ex. `https://titah.fr,https://app.titah.fr`).
+- Adapter le rate limiting si votre trafic légitime dépasse 5 demandes/heure.
+- Mettre en place un monitoring (logs Supabase, Sentry) pour repérer les refus `401`/`429`.
 
 ---
 
 ### 🟠 PRIORITÉ 2 - IMPORTANT (Dans les 2 semaines)
 
-#### 2.1 Migrer vers Supabase Auth
-
-**Avantages:**
-- Authentification robuste
-- Gestion des rôles (admin, user)
-- Session tokens sécurisés
-- 2FA possible
-- Logs d'authentification
-
-**Documentation:** https://supabase.com/docs/guides/auth
-
-**Temps estimé:** 4-6 heures
+#### 2.1 Passer sur Supabase Auth / RLS
+- Remplacer le jeton statique par une authentification Supabase (`auth.admin`) pour les routes sensibles.
+- Activer les Row Level Security sur `kv_store_2fc91c13` et n’autoriser que l’admin.
+- Mettre en place une UI d’authentification sécurisée (ou accès via studio Supabase).
 
 ---
 

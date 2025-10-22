@@ -2,10 +2,21 @@
 > Site Web Agence Création@0.1.0 dev
 > vite --host 127.0.0.1 --port 5173
 
-Port 5173 is in use, trying another one...
-Port 5174 is in use, trying another one...
-Port 5175 is in use, trying another one...
 
-  VITE v6.4.1  ready in 579 ms
+  VITE v6.4.1  ready in 228 ms
 
-  ➜  Local:   http://127.0.0.1:5176/
+  ➜  Local:   http://127.0.0.1:5173/
+11:40:42 AM [vite] .env.local changed, restarting server...
+11:40:42 AM [vite] server restarted.
+11:40:47 AM [vite] .env.local changed, restarting server...
+11:40:47 AM [vite] (client) Re-optimizing dependencies because vite config has changed
+11:40:47 AM [vite] server restarted.
+11:40:47 AM [vite] (client) error while updating dependencies:
+Error: ENOTEMPTY: directory not empty, rename '/Users/martinlaetitia/Documents/014-Site Titah/Titah/node_modules/.vite/deps_temp_ec1b3305' -> '/Users/martinlaetiti11:40:47 AM [vite] (client) error while updating dependencies:
+Error: ENOTEMPTY: directory not empty, rename '/Users/martinlaetitia/Documents/014-Site Titah/Titah/node_modules/.vite/deps_temp_cb4450d7' -> '/Users/martinlaetitia/Documents/014-Site Titah/Titah/node_modules/.vite/deps'
+    at Object.renameSync (node:fs:1021:11)
+    at Object.commit (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:14956:21)
+    at commitProcessing (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47103:32)
+    at runOptimizer (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47139:1511:44:32 AM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime, react-dom/client, react, lucide-react
+-D4NMHUTW.js:47343:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

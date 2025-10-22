@@ -6,125 +6,29 @@
 
 ---
 
-## 🚨 VULNÉRABILITÉS CRITIQUES IDENTIFIÉES
+## 🚨 ÉTAT DES VULNÉRABILITÉS CRITIQUES
 
-### ❌ 1. ACCÈS ADMIN NON PROTÉGÉ - CRITIQUE
+### ✅ [Résolu] Accès admin non protégé
+- Les composants `AdminPage` / `AdminLogin` ont été retirés du bundle actuel.
+- Aucun écran public ne tente d'appeler les routes d'administration.
+- Lorsqu'une future interface admin sera recréée, elle devra consommer l'API via un backend sécurisé (pas depuis le navigateur public).
 
-**Fichier:** `/components/AdminPage.tsx`  
-**Problème:** N'importe qui peut accéder à l'interface admin  
-**Exposition:** TOUTES les données clients (emails, téléphones, messages)
+### ✅ [Résolu] Endpoints API publics
+- `/src/supabase/functions/server/index.tsx` exige désormais un en-tête `Authorization: Bearer <ADMIN_SECRET_TOKEN>`.
+- Le token est lu depuis les secrets Supabase (`ADMIN_SECRET_TOKEN`), avec message d'erreur 401 si absent/incorrect.
+- Les origines sont limitées via CORS (`ALLOWED_ORIGINS`), et un log alerte quand une origine non autorisée est bloquée.
 
-**Code problématique:**
-```typescript
-// Ligne 54-60 : Aucune authentification !
-const contactsResponse = await fetch(
-  `https://${projectId}.supabase.co/functions/v1/make-server-2fc91c13/contacts`,
-  {
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`, // ⚠️ CLÉ PUBLIQUE = pas de sécurité
-    },
-  }
-);
-```
+### ✅ [Résolu] Métadonnées IP exposées
+- La propriété `ip` a été supprimée de `metadata`; seul `userAgent` est conservé.
+- Plus de collecte d’adresse IP → conformité RGPD renforcée.
 
-**Impact:**
-- ✅ Visible depuis le footer (bullet point •)
-- ✅ Aucun mot de passe requis
-- ✅ Tous les contacts exposés
-- ✅ Données personnelles (RGPD) accessibles à tous
+### ✅ [Résolu] Absence de rate limiting
+- Nouveau module `src/supabase/functions/server/rate-limiter.ts` : 5 requêtes/heure/IP (configurable).
+- Réponses `429` en cas d’abus, logs serveurs pour faciliter le monitoring.
 
-**Solution IMMÉDIATE requise:** Voir section "Corrections"
-
----
-
-### ❌ 2. ENDPOINTS API PUBLICS - CRITIQUE
-
-**Fichier:** `/supabase/functions/server/index.tsx`  
-**Problème:** Routes admin accessibles sans authentification
-
-**Endpoints exposés:**
-```typescript
-GET /make-server-2fc91c13/contacts        // ⚠️ Liste TOUS les contacts
-GET /make-server-2fc91c13/contacts/stats  // ⚠️ Statistiques complètes
-```
-
-**Code problématique (ligne 29-54):**
-```typescript
-app.get("/make-server-2fc91c13/contacts", async (c) => {
-  // ⚠️ PAS DE VÉRIFICATION D'AUTHENTIFICATION
-  const contacts = await kv.getByPrefix("contact_");
-  return c.json({ contacts }); // Retourne TOUT
-});
-```
-
-**Impact:**
-- N'importe qui peut faire: `GET https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts`
-- Toutes les données exposées publiquement
-- Violation RGPD potentielle
-
----
-
-### ⚠️ 3. MÉTADONNÉES IP EXPOSÉES
-
-**Fichier:** `/supabase/functions/server/index.tsx` (ligne 160)  
-**Problème:** Stockage de l'IP utilisateur
-
-```typescript
-metadata: {
-  userAgent: c.req.header("user-agent") || "unknown",
-  ip: c.req.header("x-forwarded-for") || "unknown", // ⚠️ IP stockée
-}
-```
-
-**Impact RGPD:**
-- IP = donnée personnelle selon RGPD
-- Nécessite consentement explicite
-- Doit être mentionné dans la politique de confidentialité
-
----
-
-### ⚠️ 4. PAS DE RATE LIMITING
-
-**Fichier:** `/supabase/functions/server/index.tsx`  
-**Problème:** Aucune limite de soumission
-
-**Risques:**
-- Spam massif possible
-- Attaque par déni de service (DoS)
-- Remplissage de la base avec des données inutiles
-- Coûts Supabase augmentés
-
-**Test facile:**
-```javascript
-// Un attaquant peut faire ceci en boucle :
-for (let i = 0; i < 10000; i++) {
-  fetch('https://...contact', { method: 'POST', body: {...} });
-}
-```
-
----
-
-### ⚠️ 5. XSS POTENTIEL DANS L'ADMIN
-
-**Fichier:** `/components/AdminPage.tsx` (ligne 265)  
-**Problème:** Affichage direct du message sans sanitization
-
-```typescript
-<div className="text-gray-900 bg-gray-50 p-4 rounded-[5px] whitespace-pre-wrap">
-  {selectedContact.message}  {/* ⚠️ Pas de sanitization HTML */}
-</div>
-```
-
-**Impact:**
-Si un attaquant soumet:
-```
-<script>alert('XSS')</script>
-<img src=x onerror="alert('XSS')">
-```
-
-En React, c'est généralement safe grâce à l'échappement automatique, MAIS :
-- `whitespace-pre-wrap` peut préserver certains caractères
-- Risque si on utilise `dangerouslySetInnerHTML` plus tard
+### ⚠️ [Surveillance] XSS côté futur back-office
+- Pas d’interface admin actuellement.
+- Rappel : si un back-office est réintroduit, conserver l’affichage React "safe" (sans `dangerouslySetInnerHTML`) et échapper toutes les données utilisateur.
 
 ---
 
@@ -151,286 +55,23 @@ En React, c'est généralement safe grâce à l'échappement automatique, MAIS :
 
 ---
 
-## 🛠️ CORRECTIONS REQUISES (PAR PRIORITÉ)
+## 🛠️ ACTIONS RECOMMANDÉES (PAR PRIORITÉ)
 
-### 🔴 PRIORITÉ 1 - CRITIQUE (À faire MAINTENANT)
+### 🔴 PRIORITÉ 1 - CRITIQUE
+- Définir ou régénérer `ADMIN_SECRET_TOKEN` via `./scripts/set_supabase_secrets.sh`, puis redéployer l'edge function `make-server-2fc91c13`.
+- Limiter l’accès aux endpoints admin à des services internes (CLI, backend). Ne jamais exposer le token dans le navigateur public.
+- Verrouiller `ALLOWED_ORIGINS` pour n’accepter que vos domaines de prod/staging.
 
-#### 1.1 Protéger l'accès Admin
-
-**Option A: Authentification simple par mot de passe**
-
-Créer `/components/AdminLogin.tsx`:
-```typescript
-export function AdminLogin({ onLogin }: { onLogin: () => void }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // En production, utiliser une vraie auth
-    // Pour le dev, un mot de passe simple suffit
-    if (password === 'votre_mot_de_passe_fort') {
-      localStorage.setItem('admin_auth', 'true');
-      onLogin();
-    } else {
-      setError('Mot de passe incorrect');
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl mb-4">Accès Admin</h2>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Mot de passe"
-          className="w-full px-4 py-2 border rounded mb-4"
-        />
-        {error && <p className="text-red-600 mb-4">{error}</p>}
-        <button type="submit" className="w-full bg-[#9b3eff] text-white py-2 rounded">
-          Se connecter
-        </button>
-      </form>
-    </div>
-  );
-}
-```
-
-Modifier `/components/AdminPage.tsx`:
-```typescript
-const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-useEffect(() => {
-  const auth = localStorage.getItem('admin_auth');
-  if (auth === 'true') {
-    setIsAuthenticated(true);
-  }
-}, []);
-
-if (!isAuthenticated) {
-  return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
-}
-```
-
-**Option B: Supabase Auth (Recommandé pour production)**
-
-Voir détails en section "Production".
-
----
-
-#### 1.2 Protéger les endpoints backend
-
-Modifier `/supabase/functions/server/index.tsx`:
-
-```typescript
-// Ajouter une fonction de vérification
-const verifyAdminAccess = async (authHeader: string | undefined) => {
-  // Option simple : vérifier un token secret
-  const adminToken = Deno.env.get("ADMIN_SECRET_TOKEN");
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return false;
-  }
-  
-  const token = authHeader.split(' ')[1];
-  return token === adminToken;
-};
-
-// Protéger les routes
-app.get("/make-server-2fc91c13/contacts", async (c) => {
-  const isAdmin = await verifyAdminAccess(c.req.header('Authorization'));
-  
-  if (!isAdmin) {
-    return c.json({ error: "Accès non autorisé" }, 401);
-  }
-  
-  // ... reste du code
-});
-
-app.get("/make-server-2fc91c13/contacts/stats", async (c) => {
-  const isAdmin = await verifyAdminAccess(c.req.header('Authorization'));
-  
-  if (!isAdmin) {
-    return c.json({ error: "Accès non autorisé" }, 401);
-  }
-  
-  // ... reste du code
-});
-```
-
-**Créer la variable d'environnement:**
-```
-ADMIN_SECRET_TOKEN=un_token_très_secret_et_long_ici_123456
-```
-
----
-
-### 🟠 PRIORITÉ 2 - IMPORTANT (À faire rapidement)
-
-#### 2.1 Ajouter Rate Limiting
-
-Créer `/supabase/functions/server/rate-limiter.ts`:
-```typescript
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-export const checkRateLimit = (ip: string, maxRequests: number = 5, windowMs: number = 3600000): boolean => {
-  const now = Date.now();
-  const record = rateLimitMap.get(ip);
-  
-  if (!record || now > record.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
-    return true;
-  }
-  
-  if (record.count >= maxRequests) {
-    return false;
-  }
-  
-  record.count++;
-  return true;
-};
-```
-
-Dans `/supabase/functions/server/index.tsx`:
-```typescript
-import { checkRateLimit } from './rate-limiter.ts';
-
-app.post("/make-server-2fc91c13/contact", async (c) => {
-  const ip = c.req.header("x-forwarded-for") || "unknown";
-  
-  if (!checkRateLimit(ip, 5, 3600000)) { // 5 requêtes/heure
-    return c.json({ 
-      error: "Trop de demandes. Veuillez réessayer dans 1 heure." 
-    }, 429);
-  }
-  
-  // ... reste du code
-});
-```
-
----
-
-#### 2.2 Retirer le stockage de l'IP (RGPD)
-
-**Option 1:** Supprimer complètement
-```typescript
-// Retirer ces lignes (160-162)
-metadata: {
-  userAgent: c.req.header("user-agent") || "unknown",
-  // ip: c.req.header("x-forwarded-for") || "unknown", // ❌ Retiré
-}
-```
-
-**Option 2:** Hash de l'IP (anonymisation)
-```typescript
-import { crypto } from "node:crypto";
-
-const hashIp = (ip: string): string => {
-  return crypto.createHash('sha256').update(ip).digest('hex').substring(0, 16);
-};
-
-metadata: {
-  userAgent: c.req.header("user-agent") || "unknown",
-  ipHash: hashIp(c.req.header("x-forwarded-for") || "unknown"), // ✅ Hash anonyme
-}
-```
-
----
-
-#### 2.3 Ajouter sanitization HTML dans l'Admin
-
-```typescript
-// Fonction utilitaire
-const escapeHtml = (text: string): string => {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-};
-
-// Dans l'affichage du message
-<div className="...">
-  {escapeHtml(selectedContact.message)}
-</div>
-```
-
-OU utiliser une bibliothèque:
-```bash
-npm install dompurify
-```
-
-```typescript
-import DOMPurify from 'dompurify';
-
-<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedContact.message) }} />
-```
-
----
+### 🟠 PRIORITÉ 2 - IMPORTANT
+- Remplacer le jeton statique par Supabase Auth + RLS pour disposer de sessions authentifiées et tracées.
+- Mettre en place du monitoring (Sentry, logs Supabase) afin de suivre les erreurs 401/403/429.
+- Ajuster le rate limiting selon la charge réelle et prévoir, si besoin, un mécanisme de blocage IP supplémentaire.
 
 ### 🟡 PRIORITÉ 3 - RECOMMANDÉ (Pour production)
-
-#### 3.1 Implémenter Supabase Auth
-
-```typescript
-// Dans AdminPage.tsx
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(projectId, publicAnonKey);
-
-// Login
-const { data, error } = await supabase.auth.signInWithPassword({
-  email: 'admin@titah.fr',
-  password: 'mot_de_passe_fort'
-});
-
-// Vérifier la session
-const { data: { session } } = await supabase.auth.getSession();
-if (!session) {
-  // Rediriger vers login
-}
-```
-
-Backend:
-```typescript
-const { data: { user }, error } = await supabase.auth.getUser(accessToken);
-if (!user || user.email !== 'admin@titah.fr') {
-  return c.json({ error: 'Unauthorized' }, 401);
-}
-```
-
----
-
-#### 3.2 Ajouter CAPTCHA (anti-spam)
-
-```bash
-npm install @hcaptcha/react-hcaptcha
-```
-
-```typescript
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-
-<HCaptcha
-  sitekey="votre_site_key"
-  onVerify={(token) => setCaptchaToken(token)}
-/>
-```
-
----
-
-#### 3.3 Logging & Monitoring
-
-```typescript
-// Sentry pour tracking d'erreurs
-import * as Sentry from "@sentry/react";
-
-Sentry.init({
-  dsn: "votre_dsn_sentry",
-  environment: "production"
-});
-```
-
----
+- Ajouter un CAPTCHA (hCaptcha) au formulaire public pour limiter le spam.
+- Instrumenter Sentry ou un équivalent pour centraliser les erreurs front/back.
+- Préparer un mini back-office sécurisé (hébergé côté serveur) si la consultation des contacts est requise.
+- Prévoir un test de pénétration + audit RGPD complet avant la mise en production.
 
 ## 📋 CHECKLIST AVANT PRODUCTION
 
@@ -477,62 +118,60 @@ Sentry.init({
 ---
 
 ### 🚀 STAGING/PRE-PROD
-**Status:** ❌ Non déployable en l'état
+**Status:** ⚠️ OK pour démos internes avec jeton partagé
 
-**Requis:**
-1. ✅ Auth admin (Option A minimum)
-2. ✅ Endpoints protégés
-3. ✅ Rate limiting basique
-4. ✅ Retrait IP ou hash
+**À garantir:**
+1. ADMIN_SECRET_TOKEN généré par environnement et stocké en secret.
+2. Accès admin réservé à une CLI/back-office interne (pas dans le navigateur public).
+3. Journalisation des accès et rotation régulière du jeton.
 
 ---
 
 ### 🏭 PRODUCTION
-**Status:** ❌ NON CONFORME - Corrections critiques requises
+**Status:** ❌ Incomplet tant que Supabase Auth + audit non déployés
 
-**Requis:**
-1. ✅ Supabase Auth complète
-2. ✅ Tous les endpoints protégés
-3. ✅ Rate limiting + CAPTCHA
-4. ✅ Conformité RGPD complète
-5. ✅ Monitoring complet
-6. ✅ Backup automatique
-7. ✅ Tests de sécurité (penetration testing)
+**Pré-requis supplémentaires:**
+1. Supabase Auth (roles + RLS) et panneau admin sécurisé côté serveur.
+2. CAPTCHA actif + surveillance rate limiting.
+3. Conformité RGPD validée (DPA, politique, droit à l'oubli).
+4. Monitoring/SIEM + backups automatisés et tests de restauration.
+5. Test de pénétration externe et revue de sécurité finale.
 
 ---
 
 ## 🔍 TESTS DE SÉCURITÉ RECOMMANDÉS
 
-### Test 1: Accès Admin non autorisé
-```bash
-# Ouvrir en navigation privée
-# Aller sur le site
-# Cliquer sur "•" dans le footer
-# Si vous voyez les contacts = ❌ ÉCHEC
-```
-
-### Test 2: API publique
+### Test 1: Endpoints admin sans jeton
 ```bash
 curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts \
-  -H "Authorization: Bearer eyJhbGci..."
+  -i
+# Attendu: HTTP/1.1 401 Unauthorized
+```
 
-# Si ça retourne des données = ❌ ÉCHEC
+### Test 2: Endpoints admin avec jeton valide
+```bash
+curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts \
+  -H "Authorization: Bearer $ADMIN_SECRET_TOKEN" | jq '.count'
+# Attendu: nombre de contacts, pas d'erreur
 ```
 
 ### Test 3: Rate limiting
-```javascript
-// Envoyer 10 formulaires rapidement
-for (let i = 0; i < 10; i++) {
-  submitForm();
-}
-// Si tous passent = ❌ ÉCHEC
+```bash
+for i in {1..6}; do
+  curl -o /dev/null -s -w "%{http_code}
+" \
+    -H 'Content-Type: application/json' \
+    -d '{"firstName":"Test","lastName":"User","email":"test'$i'@ex.com","establishmentType":"hotel","service":"landing-page-express","options":[],"message":"Test","consent":true}' \
+    https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contact;
+done
+# Attendu: 5 réponses 200 puis 1 réponse 429
 ```
 
-### Test 4: XSS
-```
-Message: <script>alert('XSS')</script>
-// Soumettre et voir dans admin
-// Si une alerte s'affiche = ❌ ÉCHEC
+### Test 4: Vérification RGPD
+```bash
+curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contact \
+  -H "Authorization: Bearer $ADMIN_SECRET_TOKEN" | jq '.contacts[0].metadata'
+# Attendu: objet sans adresse IP
 ```
 
 ---
@@ -549,25 +188,25 @@ Message: <script>alert('XSS')</script>
 ## ✍️ CONCLUSION
 
 ### État actuel
-L'application est **fonctionnelle** mais **NON SÉCURISÉE** pour une mise en production.
+L'application est **beaucoup mieux sécurisée** pour le développement : secrets côté environnement, endpoints admin protégés, rate limiting et respect RGPD (plus d'IP stockée).
 
-### Risques principaux
-1. **Fuite de données clients** (emails, téléphones, messages)
-2. **Spam possible** (pas de rate limiting)
-3. **Non-conformité RGPD** (IP stockée sans consentement)
+### Risques restants
+1. **Jeton statique** : doit être géré/rotaté manuellement tant qu'on n'utilise pas Supabase Auth.
+2. **Back-office** : aucune interface sécurisée n'existe encore pour consulter les contacts.
+3. **Production** : RGPD, monitoring et test de pénétration restent à finaliser.
 
-### Actions immédiates
-1. ✅ Protéger l'admin avec mot de passe (30 min)
-2. ✅ Protéger les endpoints API (30 min)
-3. ✅ Ajouter rate limiting (1h)
+### Actions prioritaires
+- Mettre en place Supabase Auth + RLS et un back-office serveur.
+- Industrialiser la gestion du `ADMIN_SECRET_TOKEN` (rotation, audits).
+- Finaliser la checklist production (CAPTCHA, monitoring, backups, audit RGPD).
 
 ### Timeline recommandée
-- **Cette semaine:** Priorité 1 (Critiques)
-- **Dans 2 semaines:** Priorité 2 (Importantes)
-- **Avant production:** Priorité 3 + Checklist complète
+- **Cette semaine :** sécuriser secrets (`set_supabase_secrets.sh`), vérifier rate limiting, restreindre CORS.
+- **Prochain sprint :** implémenter Supabase Auth + back-office interne.
+- **Avant production :** réaliser audit RGPD, monitoring, tests de pénétration et checklist complète.
 
 ---
 
 **Auditeur:** Assistant IA - Figma Make  
 **Date:** 20 Octobre 2025  
-**Prochaine revue:** Après implémentation des corrections P1
+**Prochaine revue:** Après mise en place de Supabase Auth et back-office sécurisé

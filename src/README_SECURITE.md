@@ -1,76 +1,39 @@
 # 🔒 Sécurité - Guide Rapide
 
-## ✅ Ce qui a été sécurisé
+## ✅ Ce qui est sécurisé
+- Configuration Supabase chargée via `VITE_SUPABASE_*` (plus de clés hardcodées).
+- Endpoints admin (`/contacts`, `/contacts/stats`) protégés par un jeton `ADMIN_SECRET_TOKEN`.
+- CORS restreint aux origines autorisées (`ALLOWED_ORIGINS`).
+- Rate limiting en place (5 requêtes/heure/IP) et suppression de l'adresse IP dans les métadonnées.
 
-### Interface Admin protégée ✅
-- **Avant:** Accessible à tous via le "•" dans le footer
-- **Maintenant:** Nécessite un mot de passe
-
-**Comment accéder à l'admin:**
-1. Cliquer sur le "•" dans le footer
-2. Entrer le mot de passe: **`Titah2025!Admin`**
-3. Vous êtes connecté pour 24h
-4. Cliquer sur "Déconnexion" pour se déconnecter
-
-### Protection active
-- ✅ Mot de passe requis
-- ✅ Session expire après 24h
-- ✅ Bouton de déconnexion
-- ✅ Vérification à chaque page
-
----
-
-## ⚠️ Important: Ce qui N'est PAS encore sécurisé
-
-### API Backend (CRITIQUE)
-Les endpoints suivants sont **accessibles publiquement:**
-- `/contacts` - Liste tous les contacts
-- `/contacts/stats` - Statistiques
-
-**Impact:** N'importe qui peut voir toutes les données avec un simple appel API.
-
-### Pas de Rate Limiting
-- Spam possible (1000 formulaires/seconde)
-- Coûts Supabase augmentés
-- Remplissage de la base
-
-### Stockage IP (RGPD)
-- L'IP est stockée sans consentement explicite
-- Non-conforme RGPD
+## ⚠️ Ce qu'il reste à sécuriser pour la production
+- Remplacer le jeton statique par Supabase Auth + RLS et un back-office serveur.
+- Mettre en place CAPTCHA, monitoring, backups et audit RGPD complet.
+- Planifier un test de pénétration avant mise en ligne.
 
 ---
 
 ## 🎯 Pour le développement
 
-**✅ C'EST OK** - Vous pouvez:
+**✅ C'EST OK** - Vous pouvez :
 - Tester le site localement
-- Faire une démo client
-- Développer en équipe
+- Présenter une démo client
+- Travailler en équipe avec un jeton admin partagé
 
-**⚠️ À FAIRE:**
-- Changer le mot de passe par défaut
-- Ne pas partager publiquement
+**⚠️ À SURVEILLER :**
+- Ne partager `ADMIN_SECRET_TOKEN` qu'au sein de l'équipe technique
+- Régénérer le jeton si vous suspectez une fuite
 
 ---
 
 ## 🚀 Pour la production
 
-**❌ NON PRÊT** - Il faut OBLIGATOIREMENT:
-
-### 1. Sécuriser les endpoints API (1-2h)
-Protéger `/contacts` et `/contacts/stats` avec un token secret.
-
-### 2. Ajouter Rate Limiting (2-3h)
-Limiter à 5 soumissions par heure par IP.
-
-### 3. Retirer l'IP ou la hasher (30min)
-Conformité RGPD.
-
-### 4. Supabase Auth (4-6h) - Recommandé
-Authentification robuste avec rôles et 2FA.
-
-### 5. CAPTCHA (2-3h) - Recommandé
-Protection anti-spam.
+**❌ NON PRÊT** tant que les points suivants ne sont pas livrés :
+1. Supabase Auth + RLS et un back-office sécurisé côté serveur.
+2. CAPTCHA actif sur le formulaire public et rate limiting ajusté.
+3. Conformité RGPD (politique, DPA, droit à l'oubli) validée.
+4. Monitoring (Sentry/logs), alertes et backups automatisés testés.
+5. Tests de pénétration / revue sécurité finale.
 
 ---
 
@@ -87,24 +50,45 @@ Protection anti-spam.
 
 ## 🔧 Actions Rapides
 
-### Changer le mot de passe admin
-Ouvrir `/components/AdminLogin.tsx` et modifier:
-```typescript
-const ADMIN_PASSWORD = 'Titah2025!Admin'; // ← Changer ici
-```
-
-### Tester la sécurité
+### 1. Configurer l'environnement local
 ```bash
-# Test 1: Admin protégé (devrait demander le mdp)
-1. Ouvrir en navigation privée
-2. Cliquer sur "•"
-3. ✅ Page de login affichée
-
-# Test 2: Session expire (devrait redemander le mdp)
-1. Se connecter
-2. Attendre 24h OU modifier localStorage
-3. ✅ Redirection vers login
+cp .env.example .env.local
+# puis renseigner VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY
 ```
+
+### 2. Définir les secrets Supabase
+```bash
+export ADMIN_SECRET_TOKEN=$(openssl rand -hex 48)
+export SUPABASE_URL=https://<project-id>.supabase.co
+export SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+export ALLOWED_ORIGINS=http://localhost:5173,https://titah.fr
+./scripts/set_supabase_secrets.sh
+supabase functions deploy make-server-2fc91c13
+```
+
+### 3. Vérifier les protections
+```bash
+# Sans jeton → doit répondre 401
+curl -i https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts
+
+# Avec jeton → doit répondre 200
+curl https://<project-id>.supabase.co/functions/v1/make-server-2fc91c13/contacts \
+  -H "Authorization: Bearer $ADMIN_SECRET_TOKEN"
+```
+
+---
+
+## 🆘 Aide Rapide
+
+### 401 Unauthorized sur l'endpoint admin
+- Vérifier que `ADMIN_SECRET_TOKEN` est bien défini côté Supabase.
+- Vérifier l'en-tête `Authorization: Bearer <token>` côté client interne.
+
+### CORS 403 en local
+- Ajouter l'origine (`http://127.0.0.1:5176` par exemple) dans `ALLOWED_ORIGINS`, rerun `set_supabase_secrets.sh`, redeployer la fonction.
+
+### Code 429 trop fréquent
+- Le rate limiting est réglé à 5 requêtes/heure par IP. Ajuster `checkRateLimit` si besoin.
 
 ---
 
@@ -112,57 +96,11 @@ const ADMIN_PASSWORD = 'Titah2025!Admin'; // ← Changer ici
 
 | Quand | Quoi |
 |-------|------|
-| **Maintenant** | ✅ Changer le mot de passe |
-| **Cette semaine** | Développement/tests locaux OK |
-| **Semaine 1** | Sécuriser API + Rate limiting |
-| **Semaine 2** | Supabase Auth + CAPTCHA |
-| **Semaine 3** | Tests de sécurité |
-| **Semaine 4** | Production ready ✅ |
+| **Maintenant** | Configurer `.env.local` + secrets Supabase, vérifier 401/429 |
+| **Cette semaine** | Documenter l'usage du `ADMIN_SECRET_TOKEN` (rotation, CLI interne) |
+| **Sprint suivant** | Implémenter Supabase Auth + back-office serveur |
+| **Avant mise en prod** | Ajouter CAPTCHA, monitoring, backups, audit RGPD |
+| **Go-live** | Effectuer un test de pénétration et revue finale |
 
 ---
 
-## 🆘 Aide Rapide
-
-### Je ne peux pas me connecter à l'admin
-- Vérifier le mot de passe: `Titah2025!Admin`
-- Vider le localStorage: `localStorage.clear()`
-- Actualiser la page
-
-### L'admin se déconnecte tout seul
-- Normal après 24h
-- Se reconnecter avec le mot de passe
-
-### Je veux désactiver temporairement l'auth
-**NON RECOMMANDÉ**, mais si vraiment nécessaire:
-
-Dans `/components/AdminPage.tsx`, commenter ces lignes:
-```typescript
-// if (!isAuthenticated) {
-//   return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
-// }
-```
-
-**⚠️ N'oubliez pas de décommenter avant de pousser le code!**
-
----
-
-## ✅ Résumé
-
-**Pour développement:**
-- ✅ Admin protégé par mot de passe
-- ✅ Session sécurisée
-- ✅ Prêt à utiliser
-
-**Pour production:**
-- ❌ Sécurisation API requise
-- ❌ Rate limiting requis
-- ❌ RGPD à finaliser
-
-**Temps estimé pour production:** 8-15 heures de travail
-
----
-
-**Questions?** Consultez `/SECURITY_REVIEW.md` pour tous les détails techniques.
-
-**Date:** 20 Octobre 2025  
-**Version:** 1.1.0 (Admin sécurisé)
