@@ -1,3 +1,14 @@
+import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
+
+const getSupabase = () => {
+  const url = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !serviceKey) {
+    throw new Error("[Titah] SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY manquant");
+  }
+  return createClient(url, serviceKey, { auth: { persistSession: false } });
+};
+
 import { Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { logger } from "npm:hono/logger";
@@ -244,16 +255,38 @@ app.post("/make-server-2fc91c13/contact", async (c) => {
     console.log("Saving contact to database - ID:", contactId);
 
     // Save to Supabase database
+    // Save to Supabase database
     try {
-      await kv.set(contactId, contactData);
+      const supabase = getSupabase();
+      const { error } = await supabase.from("formulaire").insert({
+        prenom: contactData.firstName,
+        nom: contactData.lastName,
+        email: contactData.email,
+        telephone: contactData.phone || null,
+        type_etablissement: contactData.establishmentType,
+        service_souhaite: contactData.service,
+        options_souhaitees: (contactData.options || []).join(", "),
+        description_projet: contactData.message,
+        accord_confidentialite: !!formData.consent,
+      });
+
+      if (error) {
+        console.error("Database error while saving contact:", error);
+        return c.json(
+          { error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard." },
+          500,
+        );
+      }
+
       console.log("Contact successfully saved to database");
-    } catch (dbError: any) {
+    } catch (dbError) {
       console.error("Database error while saving contact:", dbError);
-      // ⚠️ SÉCURITÉ : Ne pas exposer les détails de l'erreur database au client
-      return c.json({ 
-        error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard."
-      }, 500);
+      return c.json(
+        { error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard." },
+        500,
+      );
     }
+
 
     return c.json({ 
       success: true, 
