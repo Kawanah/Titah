@@ -18,5 +18,8 @@ Error: ENOTEMPTY: directory not empty, rename '/Users/martinlaetitia/Documents/0
     at Object.commit (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:14956:21)
     at commitProcessing (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47103:32)
     at runOptimizer (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47139:1511:44:32 AM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime, react-dom/client, react, lucide-react
--D4NMHUTW.js:47343:9)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+4:30:29 PM [vite] .env.local changed, restarting server...
+4:30:29 PM [vite] server restarted.
+es:105:5)
+4:30:29 PM [vite] .env.local changed, restarting server...
+4:30:29 PM [vite] server restarted.
