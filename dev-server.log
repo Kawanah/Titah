@@ -32,5 +32,8 @@ Error: ENOTEMPTY: directory not empty, rename '/Users/martinlaetitia/Documents/0
     at Object.commit (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:14956:21)
     at commitProcessing (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47103:32)
     at runOptimizer (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47139:15)
-    at onCrawlEnd (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:47343:9)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at onCrawlEnd (file:///Users/martinlaetitia/Documents/014-Site%20Titah/Titah/node_modules/vite/dist/node/chunks/dep1:01:23 PM [vite] .env.local changed, restarting server...
+1:01:24 PM [vite] server restarted.
+es:105:5)
+1:01:23 PM [vite] .env.local changed, restarting server...
+1:01:23 PM [vite] server restarted.

@@ -185,7 +185,7 @@ app.get("/contacts/stats", async (c) => {
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-    (data ?? []).forEach((row) => {
+    (data ?? []).forEach((row) => {{"code":401,"message":"Missing authorization header"}%     
       stats.byService[row.service_souhaite] =
         (stats.byService[row.service_souhaite] || 0) + 1;
       stats.byEstablishmentType[row.type_etablissement] =
