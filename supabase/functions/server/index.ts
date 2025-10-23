@@ -100,13 +100,13 @@ app.use("/*", cors({
   maxAge: 600
 }));
 // Health check endpoint
-app.get("/health", (c)=>{
+app.get("/server/health", (c)=>{
   return c.json({
     status: "ok"
   });
 });
 // Get all contacts (admin endpoint - should be protected in production)
-app.get("/contacts", async (c) => {
+app.get("/server/contacts", async (c) => {
   const authorizationError = ensureAdminAuthorized(c);
   if (authorizationError) {
     return c.json(authorizationError.body, authorizationError.status);
@@ -154,7 +154,7 @@ app.get("/contacts", async (c) => {
 
 
 // Get contact statistics
-app.get("/contacts/stats", async (c) => {
+app.get("/server/contacts/stats", async (c) => {
   const authorizationError = ensureAdminAuthorized(c);
   if (authorizationError) {
     return c.json(authorizationError.body, authorizationError.status);
@@ -207,7 +207,7 @@ app.get("/contacts/stats", async (c) => {
 });
 
 // Contact form submission endpoint
-app.post("/contact", async (c)=>{
+app.post("/server/contact", async (c)=>{
   try {
     const formData = await c.req.json();
     const rateLimitKey = c.req.header("x-forwarded-for")?.split(",")[0].trim() || c.req.header("x-real-ip") || c.req.header("cf-connecting-ip") || "unknown";
