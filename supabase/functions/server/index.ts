@@ -273,7 +273,10 @@ app.post("/make-server-2fc91c13/contact", async (c) => {
       if (error) {
         console.error("Database error while saving contact:", error);
         return c.json(
-          { error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard." },
+          {
+            error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard.",
+            details: error.message ?? error,
+          },
           500,
         );
       }
@@ -282,7 +285,10 @@ app.post("/make-server-2fc91c13/contact", async (c) => {
     } catch (dbError) {
       console.error("Database error while saving contact:", dbError);
       return c.json(
-        { error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard." },
+        {
+          error: "Impossible d'enregistrer votre demande. Veuillez réessayer plus tard.",
+          details: dbError instanceof Error ? dbError.message : String(dbError),
+        },
         500,
       );
     }
