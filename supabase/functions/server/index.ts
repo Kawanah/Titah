@@ -14,7 +14,6 @@ const getSupabase = ()=>{
 import { Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { logger } from "npm:hono/logger";
-import * as kv from "./kv_store.ts";
 import { checkRateLimit } from "./rate-limiter.ts";
 const defaultAllowedOrigins = [
   "http://localhost:5173",
@@ -101,13 +100,13 @@ app.use("/*", cors({
   maxAge: 600
 }));
 // Health check endpoint
-app.get("/make-server-2fc91c13/health", (c)=>{
+app.get("/health", (c)=>{
   return c.json({
     status: "ok"
   });
 });
 // Get all contacts (admin endpoint - should be protected in production)
-app.get("/make-server-2fc91c13/contacts", async (c) => {
+app.get("/contacts", async (c) => {
   const authorizationError = ensureAdminAuthorized(c);
   if (authorizationError) {
     return c.json(authorizationError.body, authorizationError.status);
@@ -155,7 +154,7 @@ app.get("/make-server-2fc91c13/contacts", async (c) => {
 
 
 // Get contact statistics
-app.get("/make-server-2fc91c13/contacts/stats", async (c) => {
+app.get("/contacts/stats", async (c) => {
   const authorizationError = ensureAdminAuthorized(c);
   if (authorizationError) {
     return c.json(authorizationError.body, authorizationError.status);
@@ -209,7 +208,7 @@ app.get("/make-server-2fc91c13/contacts/stats", async (c) => {
 });
 
 // Contact form submission endpoint
-app.post("/make-server-2fc91c13/contact", async (c)=>{
+app.post("/contact", async (c)=>{
   try {
     const formData = await c.req.json();
     const rateLimitKey = c.req.header("x-forwarded-for")?.split(",")[0].trim() || c.req.header("x-real-ip") || c.req.header("cf-connecting-ip") || "unknown";
