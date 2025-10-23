@@ -145,54 +145,35 @@ const contacts = (data ?? []).map((row) => ({
 return c.json({ success: true, count: contacts.length, contacts });
 
 // Get contact statistics
-app.get("/make-server-2fc91c13/contacts/stats", async (c)=>{
-  const authorizationError = ensureAdminAuthorized(c);
-  if (authorizationError) {
-    return c.json(authorizationError.body, authorizationError.status);
-  }
-  try {
-    const contacts = await kv.getByPrefix("contact_");
-    // Calculer les statistiques
-    const stats = {
-      total: contacts.length,
-      byStatus: {
-        new: contacts.filter((c)=>c.status === "new").length,
-        read: contacts.filter((c)=>c.status === "read").length,
-        contacted: contacts.filter((c)=>c.status === "contacted").length,
-        closed: contacts.filter((c)=>c.status === "closed").length
-      },
-      byService: {},
-      byEstablishmentType: {},
-      last24h: 0,
-      last7days: 0,
-      last30days: 0
-    };
-    const now = new Date();
-    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    contacts.forEach((contact)=>{
-      // Par service
-      stats.byService[contact.service] = (stats.byService[contact.service] || 0) + 1;
-      // Par type d'établissement
-      stats.byEstablishmentType[contact.establishmentType] = (stats.byEstablishmentType[contact.establishmentType] || 0) + 1;
-      // Par période
-      const submittedDate = new Date(contact.submittedAt);
-      if (submittedDate > oneDayAgo) stats.last24h++;
-      if (submittedDate > sevenDaysAgo) stats.last7days++;
-      if (submittedDate > thirtyDaysAgo) stats.last30days++;
-    });
-    return c.json({
-      success: true,
-      stats
-    });
-  } catch (error) {
-    console.error("Error calculating stats:", error);
-    return c.json({
-      error: "Impossible de calculer les statistiques"
-    }, 500);
-  }
-});
+const supabase = getSupabase();
+const { data, error } = await supabase
+  .from("formulaire")
+  .select("id, created_at, prenom, nom, email, telephone, type_etablissement, service_souhaite, options_souhaitees, description_projet, accord_confidentialite")
+  .order("created_at", { ascending: false });
+
+if (error) {
+  console.error("Error fetching contacts:", error);
+  return c.json({ error: "Impossible de récupérer les contacts" }, 500);
+}
+
+const contacts = (data ?? []).map((row) => ({
+  id: row.id,
+  submittedAt: row.created_at,
+  firstName: row.prenom,
+  lastName: row.nom,
+  email: row.email,
+  phone: row.telephone ?? "",
+  establishmentType: row.type_etablissement,
+  service: row.service_souhaite,
+  options: row.options_souhaitees
+    ? row.options_souhaitees.split(",").map((v) => v.trim()).filter(Boolean)
+    : [],
+  message: row.description_projet,
+  consent: !!row.accord_confidentialite,
+}));
+
+return c.json({ success: true, count: contacts.length, contacts });
+
 // Contact form submission endpoint
 app.post("/make-server-2fc91c13/contact", async (c)=>{
   try {
