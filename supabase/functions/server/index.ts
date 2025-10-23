@@ -115,24 +115,35 @@ app.get("/make-server-2fc91c13/contacts", async (c)=>{
   try {
     console.log("Fetching all contacts from database");
     // Récupérer tous les contacts avec le préfixe "contact_"
-    const contacts = await kv.getByPrefix("contact_");
-    // Trier par date (plus récents en premier)
-    const sortedContacts = contacts.sort((a, b)=>{
-      return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
-    });
-    console.log(`Found ${sortedContacts.length} contacts`);
-    return c.json({
-      success: true,
-      count: sortedContacts.length,
-      contacts: sortedContacts
-    });
-  } catch (error) {
-    console.error("Error fetching contacts:", error);
-    return c.json({
-      error: "Impossible de récupérer les contacts"
-    }, 500);
-  }
-});
+   const supabase = getSupabase();
+const { data, error } = await supabase
+  .from("formulaire")
+  .select("id, created_at, prenom, nom, email, telephone, type_etablissement, service_souhaite, options_souhaitees, description_projet, accord_confidentialite")
+  .order("created_at", { ascending: false });
+
+if (error) {
+  console.error("Error fetching contacts:", error);
+  return c.json({ error: "Impossible de récupérer les contacts" }, 500);
+}
+
+const contacts = (data ?? []).map((row) => ({
+  id: row.id,
+  submittedAt: row.created_at,
+  firstName: row.prenom,
+  lastName: row.nom,
+  email: row.email,
+  phone: row.telephone ?? "",
+  establishmentType: row.type_etablissement,
+  service: row.service_souhaite,
+  options: row.options_souhaitees
+    ? row.options_souhaitees.split(",").map((v) => v.trim()).filter(Boolean)
+    : [],
+  message: row.description_projet,
+  consent: !!row.accord_confidentialite,
+}));
+
+return c.json({ success: true, count: contacts.length, contacts });
+
 // Get contact statistics
 app.get("/make-server-2fc91c13/contacts/stats", async (c)=>{
   const authorizationError = ensureAdminAuthorized(c);
