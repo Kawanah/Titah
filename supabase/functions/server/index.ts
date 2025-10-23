@@ -107,72 +107,106 @@ app.get("/make-server-2fc91c13/health", (c)=>{
   });
 });
 // Get all contacts (admin endpoint - should be protected in production)
-app.get("/make-server-2fc91c13/contacts", async (c)=>{
+app.get("/make-server-2fc91c13/contacts", async (c) => {
   const authorizationError = ensureAdminAuthorized(c);
   if (authorizationError) {
     return c.json(authorizationError.body, authorizationError.status);
   }
+
   try {
-    console.log("Fetching all contacts from database");
-    // Récupérer tous les contacts avec le préfixe "contact_"
-   const supabase = getSupabase();
-const { data, error } = await supabase
-  .from("formulaire")
-  .select("id, created_at, prenom, nom, email, telephone, type_etablissement, service_souhaite, options_souhaitees, description_projet, accord_confidentialite")
-  .order("created_at", { ascending: false });
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("formulaire")
+      .select(
+        "id, created_at, prenom, nom, email, telephone, type_etablissement, service_souhaite, options_souhaitees, description_projet, accord_confidentialite"
+      )
+      .order("created_at", { ascending: false });
 
-if (error) {
-  console.error("Error fetching contacts:", error);
-  return c.json({ error: "Impossible de récupérer les contacts" }, 500);
-}
+    if (error) {
+      console.error("Error fetching contacts:", error);
+      return c.json({ error: "Impossible de récupérer les contacts" }, 500);
+    }
 
-const contacts = (data ?? []).map((row) => ({
-  id: row.id,
-  submittedAt: row.created_at,
-  firstName: row.prenom,
-  lastName: row.nom,
-  email: row.email,
-  phone: row.telephone ?? "",
-  establishmentType: row.type_etablissement,
-  service: row.service_souhaite,
-  options: row.options_souhaitees
-    ? row.options_souhaitees.split(",").map((v) => v.trim()).filter(Boolean)
-    : [],
-  message: row.description_projet,
-  consent: !!row.accord_confidentialite,
-}));
+    const contacts = (data ?? []).map((row) => ({
+      id: row.id,
+      submittedAt: row.created_at,
+      firstName: row.prenom,
+      lastName: row.nom,
+      email: row.email,
+      phone: row.telephone ?? "",
+      establishmentType: row.type_etablissement,
+      service: row.service_souhaite,
+      options: row.options_souhaitees
+        ? row.options_souhaitees.split(",").map((v) => v.trim()).filter(Boolean)
+        : [],
+      message: row.description_projet,
+      consent: !!row.accord_confidentialite,
+    }));
 
-return c.json({ success: true, count: contacts.length, contacts });
+    return c.json({ success: true, count: contacts.length, contacts });
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    return c.json(
+      { error: "Impossible de récupérer les contacts" },
+      500
+    );
+  }
+});
+
 
 // Get contact statistics
-const supabase = getSupabase();
-const { data, error } = await supabase
-  .from("formulaire")
-  .select("id, created_at, prenom, nom, email, telephone, type_etablissement, service_souhaite, options_souhaitees, description_projet, accord_confidentialite")
-  .order("created_at", { ascending: false });
+app.get("/make-server-2fc91c13/contacts/stats", async (c) => {
+  const authorizationError = ensureAdminAuthorized(c);
+  if (authorizationError) {
+    return c.json(authorizationError.body, authorizationError.status);
+  }
 
-if (error) {
-  console.error("Error fetching contacts:", error);
-  return c.json({ error: "Impossible de récupérer les contacts" }, 500);
-}
+  try {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("formulaire")
+      .select("id, created_at, type_etablissement, service_souhaite");
 
-const contacts = (data ?? []).map((row) => ({
-  id: row.id,
-  submittedAt: row.created_at,
-  firstName: row.prenom,
-  lastName: row.nom,
-  email: row.email,
-  phone: row.telephone ?? "",
-  establishmentType: row.type_etablissement,
-  service: row.service_souhaite,
-  options: row.options_souhaitees
-    ? row.options_souhaitees.split(",").map((v) => v.trim()).filter(Boolean)
-    : [],
-  message: row.description_projet,
-  consent: !!row.accord_confidentialite,
-}));
+    if (error) {
+      console.error("Error calculating stats:", error);
+      return c.json({ error: "Impossible de calculer les statistiques" }, 500);
+    }
 
-return c.json({ success: true, count: contacts.length, contacts });
+    const stats = {
+      total: data?.length ?? 0,
+      byService: {} as Record<string, number>,
+      byEstablishmentType: {} as Record<string, number>,
+      last24h: 0,
+      last7days: 0,
+      last30days: 0,
+    };
+
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    (data ?? []).forEach((row) => {
+      stats.byService[row.service_souhaite] =
+        (stats.byService[row.service_souhaite] || 0) + 1;
+      stats.byEstablishmentType[row.type_etablissement] =
+        (stats.byEstablishmentType[row.type_etablissement] || 0) + 1;
+
+      const createdAt = new Date(row.created_at);
+      if (createdAt > oneDayAgo) stats.last24h++;
+      if (createdAt > sevenDaysAgo) stats.last7days++;
+      if (createdAt > thirtyDaysAgo) stats.last30days++;
+    });
+
+    return c.json({ success: true, stats });
+  } catch (error) {
+    console.error("Error calculating stats:", error);
+    return c.json(
+      { error: "Impossible de calculer les statistiques" },
+      500
+    );
+  }
+});
 
 // Contact form submission endpoint
 app.post("/make-server-2fc91c13/contact", async (c)=>{
