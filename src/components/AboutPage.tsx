@@ -1,4 +1,4 @@
-import { Check, Laptop, Layers, Rocket, Smartphone, Palette, Users, TrendingUp, Award, Sparkles, Package } from 'lucide-react';
+import { Laptop, Layers, Rocket, Smartphone, Palette, Users, TrendingUp, Award, Sparkles, Package } from 'lucide-react';
 import imgKawanahStationF from "figma:asset/1c1ecca7c133c22cf4a15d0a0c26d1e6fb93df00.png";
 import imgPortraitSonia from "figma:asset/4972d086d3cc9b4323dee58218ab3efaf152d172.png";
 import imgPortraitLaetitia from "figma:asset/03c76274f53f49d1a50ab139df4f1dbabfe50089.png";
@@ -271,54 +271,81 @@ function KawanahBannerSection() {
     "Générer de nouveaux revenus.",
     "Faire gagner du temps à vos équipes."
   ];
+  const GoalBullet = ({ label }: { label: string }) => (
+    <div className="flex items-center gap-3">
+      <svg
+        width={21}
+        height={20}
+        viewBox="0 0 21 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-shrink-0"
+      >
+        <path
+          d="M4.5 10.25L8.25 14L16.5 5.75"
+          stroke="#7F22FE"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <rect
+          x="1.25"
+          y="1.25"
+          width="18.5"
+          height="17.5"
+          rx="2.5"
+          stroke="#7F22FE"
+          strokeWidth="2.5"
+        />
+      </svg>
+      <p className="text-[15px] leading-[20px] text-[#1b1c1e] font-light">{label}</p>
+    </div>
+  );
 
   return (
     <div className={`bg-white ${SECTION_PADDING.large}`}>
-      <div className={CONTAINER_CLASSES}>
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 sm:gap-16 items-center">
-          <div className="order-2 lg:order-1">
-            <h2 className="font-bold text-[32px] sm:text-[40px] lg:text-[48px] leading-tight mb-6 sm:mb-8">
-              <span>Ce que nous </span>
-              <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
-            </h2>
+      <div className="max-w-[1348px] mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
+        <div className="flex flex-col gap-10">
+          <h2 className="font-extrabold text-[32px] sm:text-[38px] lg:text-[45px] leading-[1.1]">
+            <span>Ce que nous </span>
+            <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
+          </h2>
 
-            <div className="text-base sm:text-lg text-[#1b1c1e] space-y-4 mb-6">
-              <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
-              <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
-            </div>
+          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-[48px]">
+            <div className="w-full lg:max-w-[694px] flex flex-col gap-5 text-[#1b1c1e]">
+              <div className="space-y-4 text-base leading-[24px]">
+                <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
+                <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
+              </div>
 
-            <div className="space-y-4 mb-6">
-              <p className="font-semibold text-lg text-[#1b1c1e]">Objectifs :</p>
               <div className="space-y-3">
-                {goals.map((goal, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-[#7f22fe]" strokeWidth={2.5} />
-                    <p className="text-base text-[#1b1c1e]">{goal}</p>
-                  </div>
-                ))}
+                <p className="text-base leading-[24px]">Objectifs :</p>
+                <div className="space-y-2">
+                  {goals.map((goal) => (
+                    <GoalBullet key={goal} label={goal} />
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-base leading-[27px] font-medium">
+                STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 pt-4">
+                <button className="w-full sm:w-auto min-w-[240px] bg-gradient-to-r from-[#9b3eff] to-[#ff6900] text-white px-6 py-3 rounded-[5px] text-base font-semibold shadow-[0px_4px_20px_rgba(155,62,255,0.3)] border border-white transition-transform duration-300 hover:-translate-y-0.5">
+                  Offre spéciale pour nos client·e·s
+                </button>
+                <button className="w-full sm:w-auto min-w-[240px] text-[#9b3eff] px-6 py-3 rounded-[5px] border-2 border-[#9b3eff] text-base font-semibold bg-white/50 transition-transform duration-300 hover:-translate-y-0.5">
+                  Accéder à l'offre spéciale Titah
+                </button>
               </div>
             </div>
 
-            <p className="text-base text-[#1b1c1e] mb-6">
-              STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-gradient-to-r from-[#9b3eff] to-[#ff6b35] text-white px-6 py-3 rounded-[8px] text-sm sm:text-base font-semibold shadow-[0px_12px_32px_rgba(155,62,255,0.35)] transition-transform duration-300 hover:-translate-y-0.5">
-                Offre spéciale pour nos client·e·s
-              </button>
-              <button className="text-[#9b3eff] px-6 py-3 rounded-[8px] border-2 border-[#9b3eff] text-sm sm:text-base font-semibold transition-transform duration-300 hover:-translate-y-0.5">
-                Accéder à l'offre spéciale Titah
-              </button>
-            </div>
-          </div>
-
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end lg:pl-8">
-            <div className="relative lg:-mr-12">
-              <img 
-                src={visuelGlobale} 
-                alt="Aperçu de la plateforme Kawanah" 
-                className="w-full max-w-[780px] drop-shadow-[0px_35px_80px_rgba(0,0,0,0.18)]"
+            <div className="w-full lg:flex-1 flex justify-center lg:justify-end">
+              <img
+                src={visuelGlobale}
+                alt="Aperçu de la plateforme Kawanah"
+                className="w-full max-w-[640px]"
               />
             </div>
           </div>
