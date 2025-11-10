@@ -304,21 +304,21 @@ function KawanahBannerSection() {
 
   return (
     <div className={`bg-white ${SECTION_PADDING.large}`}>
-      <div className="max-w-[1348px] mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
+      <div className=" mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
         <div className="flex flex-col gap-10">
           <h2 className="font-extrabold text-[32px] sm:text-[38px] lg:text-[45px] leading-[1.1]">
             <span>Ce que nous </span>
             <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
+          <div className="grid grid-cols-2 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
             <div className="w-full flex flex-col gap-5 text-[#1b1c1e]">
               <div className="space-y-4 text-[16px] leading-[24px]">
                 <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
                 <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <p className="text-[16px] leading-[24px]">Objectifs :</p>
                 <div className="space-y-3">
                   {goals.map((goal) => (
