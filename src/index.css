@@ -3267,3 +3267,10 @@ html {
   inherits: false;
   initial-value: 0;
 }
+
+@layer base {
+  a[href]:hover,
+  a[href]:focus-visible {
+    cursor: crosshair;
+  }
+}
