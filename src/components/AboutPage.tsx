@@ -2,7 +2,7 @@ import { Check, Laptop, Layers, Rocket, Smartphone, Palette, Users, TrendingUp, 
 import imgKawanahStationF from "figma:asset/1c1ecca7c133c22cf4a15d0a0c26d1e6fb93df00.png";
 import imgPortraitSonia from "figma:asset/4972d086d3cc9b4323dee58218ab3efaf152d172.png";
 import imgPortraitLaetitia from "figma:asset/03c76274f53f49d1a50ab139df4f1dbabfe50089.png";
-import imgOuvertureDeck from "figma:asset/fd8a36d2589fc918dc7d9b9cb05e6f14a1b81216.png";
+import visuelGlobale from "../assets/Visuel globale.webp";
 import { HeroBadge } from './shared/HeroBadge';
 import { GradientBackground } from './shared/GradientBackground';
 import { CONTAINER_CLASSES, SECTION_PADDING } from '../utils/constants';
@@ -275,47 +275,52 @@ function KawanahBannerSection() {
   return (
     <div className={`bg-white ${SECTION_PADDING.large}`}>
       <div className={CONTAINER_CLASSES}>
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 sm:gap-16 lg:gap-[80px] items-center">
-          <div>
-            <h2 className="font-bold text-3xl sm:text-4xl lg:text-[45px] lg:leading-[45px] leading-tight mb-6 sm:mb-8 lg:mb-[32px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 sm:gap-16 items-center">
+          <div className="order-2 lg:order-1">
+            <h2 className="font-bold text-[32px] sm:text-[40px] lg:text-[48px] leading-tight mb-6 sm:mb-8">
               <span>Ce que nous </span>
               <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
             </h2>
-            <div className="text-sm sm:text-base lg:text-[16px] lg:leading-[24px] leading-relaxed space-y-4 mb-6 sm:mb-8 lg:mb-[32px]">
+
+            <div className="text-base sm:text-lg text-[#1b1c1e] space-y-4 mb-6">
               <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
               <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
             </div>
-            
-            <p className="text-base sm:text-lg lg:text-[20px] lg:leading-[24px] mb-4 sm:mb-[16px]">Objectifs :</p>
-            <div className="space-y-2 sm:space-y-[8px] mb-6 sm:mb-8 lg:mb-[32px]">
-              {goals.map((goal, idx) => (
-                <div key={idx} className="flex items-start gap-2 sm:gap-[7px]">
-                  <Check className="w-5 h-5 sm:w-[21px] sm:h-[20px] text-[#7f22fe] flex-shrink-0 mt-[2px]" strokeWidth={2.5} />
-                  <p className="text-sm sm:text-[15px] lg:leading-[16px]">{goal}</p>
-                </div>
-              ))}
+
+            <div className="space-y-4 mb-6">
+              <p className="font-semibold text-lg text-[#1b1c1e]">Objectifs :</p>
+              <div className="space-y-3">
+                {goals.map((goal, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <Check className="w-5 h-5 text-[#7f22fe]" strokeWidth={2.5} />
+                    <p className="text-base text-[#1b1c1e]">{goal}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <p className="text-sm sm:text-base lg:text-[16px] lg:leading-[20px] leading-relaxed mb-6 sm:mb-8 lg:mb-[32px]">
+            <p className="text-base text-[#1b1c1e] mb-6">
               STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-[16px] lg:gap-[70px]">
-              <button className="bg-gradient-to-r from-[#9b3eff] to-[#ff6b35] text-white px-6 sm:px-[25px] py-2 sm:py-[13px] rounded-[5px] shadow-[0px_4px_20px_rgba(155,62,255,0.3)] text-sm sm:text-base transition-all duration-300 hover:shadow-[0px_8px_24px_rgba(155,62,255,0.4)] hover:-translate-y-0.5">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-gradient-to-r from-[#9b3eff] to-[#ff6b35] text-white px-6 py-3 rounded-[8px] text-sm sm:text-base font-semibold shadow-[0px_12px_32px_rgba(155,62,255,0.35)] transition-transform duration-300 hover:-translate-y-0.5">
                 Offre spéciale pour nos client·e·s
               </button>
-              <button className="bg-[rgba(255,255,255,0.5)] text-[#9b3eff] px-6 sm:px-[26px] py-2 sm:py-[14px] rounded-[5px] border-2 border-[#9b3eff] text-sm sm:text-base transition-all duration-300 hover:bg-white">
+              <button className="text-[#9b3eff] px-6 py-3 rounded-[8px] border-2 border-[#9b3eff] text-sm sm:text-base font-semibold transition-transform duration-300 hover:-translate-y-0.5">
                 Accéder à l'offre spéciale Titah
               </button>
             </div>
           </div>
 
-          <div className="order-first lg:order-last">
-            <img 
-              src={imgOuvertureDeck} 
-              alt="Ouverture Deck" 
-              className="w-full rounded-[8px]"
-            />
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end lg:pl-8">
+            <div className="relative lg:-mr-12">
+              <img 
+                src={visuelGlobale} 
+                alt="Aperçu de la plateforme Kawanah" 
+                className="w-full max-w-[780px] drop-shadow-[0px_35px_80px_rgba(0,0,0,0.18)]"
+              />
+            </div>
           </div>
         </div>
       </div>

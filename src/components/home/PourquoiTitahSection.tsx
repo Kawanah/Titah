@@ -12,7 +12,7 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
             <h2 className="font-bold text-[#1b1c1e] text-3xl sm:text-4xl lg:text-[60px] leading-tight sm:leading-[60px] mb-4">
               Pourquoi choisir Titah ?
             </h2>
-            <p className="text-[#4a5565] text-lg sm:text-xl lg:text-2xl sm:mb-15">
+            <p className="text-[#4a5565] text-lg sm:text-2xl lg:text-2xl sm:mb-10">
               L'expertise et la proximité au service de votre réussite
             </p>
             <div className="space-y-4 text-[#1b1c1e] text-base sm:text-lg leading-relaxed">
