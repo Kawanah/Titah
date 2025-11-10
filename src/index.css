@@ -3269,8 +3269,10 @@ html {
 }
 
 @layer base {
-  a[href]:hover,
-  a[href]:focus-visible {
-    cursor: crosshair;
+  a[href],
+  button,
+  [role="button"],
+  .cursor-pointer {
+    cursor: pointer;
   }
 }
