@@ -9,10 +9,10 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div>
-            <h2 className="font-bold text-[#1b1c1e] text-3xl sm:text-4xl lg:text-[45px] leading-tight sm:leading-[60px] mb-4">
+            <h2 className="font-bold text-[#1b1c1e] text-3xl sm:text-4xl lg:text-[60px] leading-tight sm:leading-[60px] mb-4">
               Pourquoi choisir Titah ?
             </h2>
-            <p className="text-[#4a5565] text-base sm:text-lg lg:text-xl sm:mb-10">
+            <p className="text-[#4a5565] text-lg sm:text-xl lg:text-2xl sm:mb-15">
               L'expertise et la proximité au service de votre réussite
             </p>
             <div className="space-y-4 text-[#1b1c1e] text-base sm:text-lg leading-relaxed">
