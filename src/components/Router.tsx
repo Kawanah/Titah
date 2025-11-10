@@ -1,6 +1,7 @@
 import { HomePage } from './HomePage';
 import { AboutPage } from './AboutPage';
 import { OffersPage } from './OffersPage';
+import { ModelsPage } from './ModelsPage';
 import { FAQPage } from './FAQPage';
 import { ContactPage } from './ContactPage';
 import { PrivacyPage } from './PrivacyPage';
@@ -22,7 +23,9 @@ export function Router({ currentRoute, onNavigate }: RouterProps) {
     
     case ROUTES.ABOUT:
       return <AboutPage onNavigate={onNavigate} />;
-    
+    case ROUTES.MODELS:
+      return <ModelsPage onNavigate={onNavigate} />;
+
     case ROUTES.OFFERS:
       return <OffersPage onNavigate={onNavigate} />;
     

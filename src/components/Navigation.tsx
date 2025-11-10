@@ -13,6 +13,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
   const navItems = [
     { id: 'offers', label: 'Nos offres', isButton: false },
     { id: 'about', label: 'À propos', isButton: false },
+    { id: 'models', label: 'Nos modèles', isButton: false },
     { id: 'faq', label: 'FAQ', isButton: false },
     { id: 'contact', label: 'Contact', isButton: true },
   ];

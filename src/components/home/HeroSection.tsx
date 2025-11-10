@@ -41,7 +41,7 @@ export function HeroSection({ onNavigate }: NavigationProps) {
                 Voir nos offres
               </button>
               <button 
-                onClick={() => onNavigate('about')}
+                onClick={() => onNavigate('models')}
                 className="bg-[rgba(255,255,255,0.5)] text-[#9b3eff] px-6 sm:px-[26px] py-2 border-2 border-[#9b3eff] text-lg sm:text-[20px] transition-all duration-300 hover:bg-white hover:-translate-y-0.5"
                 style={{ borderRadius: RADIUS.xs }}
               >

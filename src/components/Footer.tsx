@@ -71,6 +71,7 @@ export function Footer({ onNavigate }: FooterProps) {
               <li>
                 <a 
                   href="#" 
+                  onClick={handleNavClick('models')}
                   className="hover:text-[#9b3eff] transition-colors"
                 >
                   Nos modèles

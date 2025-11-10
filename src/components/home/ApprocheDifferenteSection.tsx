@@ -1,5 +1,8 @@
+import type { ReactNode } from 'react';
+import { NavigationProps } from '../../utils/types';
+
 function FeatureCard({ icon, title, description, color, bgColor }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
   color: string;
@@ -27,7 +30,7 @@ function FeatureCard({ icon, title, description, color, bgColor }: {
   );
 }
 
-export function ApprocheDifferenteSection() {
+export function ApprocheDifferenteSection({ onNavigate }: NavigationProps) {
   const features = [
     {
       icon: (
@@ -106,7 +109,10 @@ export function ApprocheDifferenteSection() {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-[#9b3eff] text-white px-6 py-3 rounded-[5px] shadow-[0px_4px_20px_0px_rgba(155,62,255,0.3)] transition-all duration-300 hover:shadow-[0px_8px_24px_rgba(155,62,255,0.4)] hover:-translate-y-0.5">
+          <button
+            onClick={() => onNavigate('models')}
+            className="bg-[#9b3eff] text-white px-6 py-3 rounded-[5px] shadow-[0px_4px_20px_0px_rgba(155,62,255,0.3)] transition-all duration-300 hover:shadow-[0px_8px_24px_rgba(155,62,255,0.4)] hover:-translate-y-0.5"
+          >
             Voir nos modèles
           </button>
         </div>

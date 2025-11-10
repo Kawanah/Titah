@@ -12,4 +12,4 @@ export interface NavigationProps {
 /**
  * Page type for routing
  */
-export type PageType = 'home' | 'about' | 'offers' | 'faq' | 'contact';
+export type PageType = 'home' | 'about' | 'models' | 'offers' | 'faq' | 'contact';

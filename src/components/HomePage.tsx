@@ -15,7 +15,7 @@ export function HomePage({ onNavigate }: NavigationProps) {
       <HeroSection onNavigate={onNavigate} />
       <BadgeSection />
       <KawanahBannerSection />
-      <ApprocheDifferenteSection />
+      <ApprocheDifferenteSection onNavigate={onNavigate} />
       <FondationsSection />
       <OffresSection onNavigate={onNavigate} />
       <PourquoiTitahSection onNavigate={onNavigate} />
