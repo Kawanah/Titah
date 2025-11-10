@@ -1,3 +1,4 @@
+import { Linkedin } from 'lucide-react';
 import { TitahLogo } from './TitahLogo';
 
 interface FooterProps {
@@ -27,13 +28,21 @@ export function Footer({ onNavigate }: FooterProps) {
                 Agence spécialisée dans la création de sites web pour l'hébergement touristique.
               </p>
               <p>Métropole du Grand Paris - France</p>
-              <a 
-                href="mailto:welcome@titah.fr" 
+              <a
+                href="mailto:welcome@titah.fr"
                 className="block underline hover:text-[#9b3eff] transition-colors"
               >
                 welcome@titah.fr
               </a>
-              <p>LinkedIn</p>
+              <a
+                href="https://www.linkedin.com/company/titah-agence-digitale/?viewAsMember=true"
+                className="inline-flex items-center gap-2 text-[#4a5565] hover:text-[#9b3eff] transition-colors"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin className="h-5 w-5" aria-hidden="true" />
+                <span>LinkedIn</span>
+              </a>
             </div>
           </div>
 
