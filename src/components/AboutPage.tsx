@@ -48,7 +48,14 @@ function QuiNousSommesSection({ onNavigate }: NavigationProps) {
               <p>
                 <span>Nous avons réalisé de nombreux projets en design graphique et web pour des structures variées.</span>
                 <br />
-                <span className="text-[#7f22fe]">Voir nos réalisations avec Axii Design</span>
+                <a
+                  href="https://www.axiidesign.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#7f22fe] underline hover:text-[#9b3eff] transition-colors"
+                >
+                  Voir nos réalisations avec Axii Design
+                </a>
               </p>
             </div>
           </div>

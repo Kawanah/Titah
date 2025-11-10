@@ -8,11 +8,8 @@ export function ModelsPage({ onNavigate }: NavigationProps) {
       <GradientBackground className={SECTION_PADDING.hero}>
         <div className={CONTAINER_CLASSES}>
           <div className="max-w-3xl text-center mx-auto space-y-6">
-            <p className="uppercase text-xs tracking-[0.3em] text-[#9b3eff]">
-              Nos modèles
-            </p>
             <h1 className="font-bold text-3xl sm:text-4xl lg:text-[50px] leading-tight text-[#0f0f0f]">
-              Des modèles en préparation
+              Nos modèles
             </h1>
             <p className="text-base sm:text-lg text-[#44484f] leading-relaxed">
               Nous finalisons actuellement notre sélection de modèles prêts à l’emploi. Revenez très bientôt pour découvrir les concepts adaptés à chaque type d’hébergement.
