@@ -266,10 +266,10 @@ function PourquoiChoisirSection() {
 
 function KawanahBannerSection() {
   const goals = [
+    "Faire gagner du temps à vos équipes.",
     "Simplifier la gestion quotidienne.",
     "Améliorer l'expérience voyageur·euse.",
-    "Générer de nouveaux revenus.",
-    "Faire gagner du temps à vos équipes."
+    "Générer de nouveaux revenus."
   ];
   const GoalBullet = ({ label }: { label: string }) => (
     <div className="flex items-center gap-3">
@@ -311,37 +311,37 @@ function KawanahBannerSection() {
             <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
           </h2>
 
-          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-[48px]">
-            <div className="w-full lg:max-w-[694px] flex flex-col gap-5 text-[#1b1c1e]">
-              <div className="space-y-4 text-base leading-[24px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
+            <div className="w-full flex flex-col gap-5 text-[#1b1c1e]">
+              <div className="space-y-4 text-[16px] leading-[24px]">
                 <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
                 <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
               </div>
 
               <div className="space-y-3">
-                <p className="text-base leading-[24px]">Objectifs :</p>
-                <div className="space-y-2">
+                <p className="text-[16px] leading-[24px]">Objectifs :</p>
+                <div className="space-y-3">
                   {goals.map((goal) => (
                     <GoalBullet key={goal} label={goal} />
                   ))}
                 </div>
               </div>
 
-              <p className="text-base leading-[27px] font-medium">
+              <p className="text-[16px] leading-[27px] font-semibold">
                 STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 pt-4">
-                <button className="w-full sm:w-auto min-w-[240px] bg-gradient-to-r from-[#9b3eff] to-[#ff6900] text-white px-6 py-3 rounded-[5px] text-base font-semibold shadow-[0px_4px_20px_rgba(155,62,255,0.3)] border border-white transition-transform duration-300 hover:-translate-y-0.5">
+                <button className="w-full sm:w-auto min-w-[260px] bg-gradient-to-r from-[#9b3eff] to-[#ff6900] text-white px-6 py-3 rounded-[5px] text-[16px] font-semibold shadow-[0px_4px_20px_rgba(155,62,255,0.3)] border border-white transition-transform duration-300 hover:-translate-y-0.5">
                   Offre spéciale pour nos client·e·s
                 </button>
-                <button className="w-full sm:w-auto min-w-[240px] text-[#9b3eff] px-6 py-3 rounded-[5px] border-2 border-[#9b3eff] text-base font-semibold bg-white/50 transition-transform duration-300 hover:-translate-y-0.5">
+                <button className="w-full sm:w-auto min-w-[260px] text-[#9b3eff] px-6 py-3 rounded-[5px] border-2 border-[#9b3eff] text-[16px] font-semibold bg-white/50 transition-transform duration-300 hover:-translate-y-0.5">
                   Accéder à l'offre spéciale Titah
                 </button>
               </div>
             </div>
 
-            <div className="w-full lg:flex-1 flex justify-center lg:justify-end">
+            <div className="w-full flex justify-center lg:justify-end">
               <img
                 src={visuelGlobale}
                 alt="Aperçu de la plateforme Kawanah"
