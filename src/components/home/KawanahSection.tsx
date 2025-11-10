@@ -85,7 +85,7 @@ export function KawanahSection() {
             <img 
               src={visuelGlobale} 
               alt="Kawanah webapp" 
-              className="w-auto h-full rounded-lg scale-90"
+              className="w-full h-auto rounded-lg scale-120"
             />
           </div>
         </div>
