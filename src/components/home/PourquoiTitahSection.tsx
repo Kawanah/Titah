@@ -12,7 +12,7 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
             <h2 className="font-bold text-[#1b1c1e] text-3xl sm:text-4xl lg:text-[45px] leading-tight sm:leading-[60px] mb-4">
               Pourquoi choisir Titah ?
             </h2>
-            <p className="text-[#4a5565] text-xl sm:text-2xl lg:text-[24px] sm:mb-8 text-[23px] mt-[0px] mr-[0px] mb-[10px] ml-[0px]">
+            <p className="text-[#4a5565] text-base sm:text-lg lg:text-xl sm:mb-10">
               L'expertise et la proximité au service de votre réussite
             </p>
             <div className="space-y-4 text-[#1b1c1e] text-base sm:text-lg leading-relaxed">
@@ -25,7 +25,7 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
             </div>
             <button 
               onClick={() => onNavigate('about')}
-              className="mt-6 sm:mt-8 bg-[#9b3eff] text-white px-8 py-3 rounded-[5px] shadow-[0px_4px_20px_0px_rgba(155,62,255,0.3)] transition-all duration-300 hover:shadow-[0px_8px_24px_rgba(155,62,255,0.4)] hover:-translate-y-0.5"
+              className="mt-6 sm:mt-8 bg-[#9b3eff] text-white px-8 py-3 rounded-[5px] transition-all duration-300 hover:-translate-y-0.5"
             >
               Découvrir l'agence
             </button>
@@ -35,7 +35,7 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
             <img 
               src={imgImageExempleDeSiteWebLeGiteDesLavandes} 
               alt="Exemple de site web" 
-              className="w-full h-auto rounded-lg shadow-[0px_25px_50px_0px_rgba(0,0,0,0.15)]"
+              className="w-full h-auto rounded-lg"
             />
           </div>
         </div>

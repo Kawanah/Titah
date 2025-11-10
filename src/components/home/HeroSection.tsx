@@ -1,6 +1,6 @@
 import imgImageExempleDeSiteWebLeGiteDesLavandes from "figma:asset/79b21271c1d487fae19aa4ff104956affdcd126d.png";
 import { NavigationProps } from '../../utils/types';
-import { GRADIENTS, CONTAINER_CLASSES, SHADOWS, RADIUS } from '../../utils/constants';
+import { GRADIENTS, CONTAINER_CLASSES, RADIUS } from '../../utils/constants';
 
 export function HeroSection({ onNavigate }: NavigationProps) {
   return (
@@ -36,9 +36,7 @@ export function HeroSection({ onNavigate }: NavigationProps) {
               <button 
                 onClick={() => onNavigate('offers')}
                 className="bg-gradient-to-r from-[#9b3eff] to-[#ff6b35] text-white px-6 sm:px-[25px] py-2 border border-white text-lg sm:text-[20px] transition-all duration-300 hover:-translate-y-0.5"
-                style={{ borderRadius: RADIUS.xs, boxShadow: SHADOWS.button }}
-                onMouseEnter={(e) => e.currentTarget.style.boxShadow = SHADOWS.buttonHover}
-                onMouseLeave={(e) => e.currentTarget.style.boxShadow = SHADOWS.button}
+                style={{ borderRadius: RADIUS.xs }}
               >
                 Voir nos offres
               </button>
@@ -58,7 +56,6 @@ export function HeroSection({ onNavigate }: NavigationProps) {
               src={imgImageExempleDeSiteWebLeGiteDesLavandes} 
               alt="Exemple de site web - Le gîte des lavandes" 
               className="w-full h-auto rounded-lg scale-110"
-              style={{ boxShadow: SHADOWS.image }}
             />
           </div>
         </div>
