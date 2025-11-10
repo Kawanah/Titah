@@ -1,4 +1,4 @@
-import imgKawanahStationF from "figma:asset/1c1ecca7c133c22cf4a15d0a0c26d1e6fb93df00.png";
+import visuelGlobale from "../../assets/Visuel globale.webp";
 import svgPaths from "../../imports/svg-9h1x2qd6f3";
 
 function Logo() {
@@ -83,9 +83,9 @@ export function KawanahSection() {
           
           <div className="relative order-first lg:order-last">
             <img 
-              src={imgKawanahStationF} 
+              src={visuelGlobale} 
               alt="Kawanah webapp" 
-              className="w-full h-auto rounded-lg shadow-[0px_15px_20px_0px_rgba(0,0,0,0.15)] scale-90"
+              className="w-auto h-full rounded-lg scale-90"
             />
           </div>
         </div>
