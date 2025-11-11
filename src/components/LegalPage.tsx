@@ -22,61 +22,91 @@ export function LegalPage() {
 
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12 text-[#1B1C1E]">
         <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Éditeur du site</h2>
+          <h2 className="text-[28px] font-semibold">Éditeur</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Titah — Agence digitale dédiée aux hébergeur·euse·s touristiques<br />
-            119-121 avenue du Général Leclerc, 93500 Pantin – France<br />
-            Email&nbsp;: <a className="underline" href="mailto:welcome@titah.fr">welcome@titah.fr</a><br />
-            Téléphone&nbsp;: communiqué sur demande
-          </p>
-          <p className="text-sm text-[#717182]">
-            Entreprise individuelle immatriculée en France. TVA intracommunautaire&nbsp;:
-            FR45998437765.
+            <strong>www.titah.fr</strong> est le site officiel de l’agence Titah.<br />
+            SAS au capital de 1&nbsp;000&nbsp;€<br />
+            Siège social&nbsp;: 22 rue Auguste Péron – 93100 Montreuil<br />
+            N° SIREN&nbsp;: 920&nbsp;288&nbsp;677<br />
+            N° TVA intracommunautaire&nbsp;: FR51&nbsp;920&nbsp;288&nbsp;677<br />
+            Mail&nbsp;: <a className="underline" href="mailto:welcome@titah.fr">welcome@titah.fr</a>
           </p>
         </article>
 
         <article className="space-y-4">
           <h2 className="text-[28px] font-semibold">Directrice de la publication</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Sonia K., co-fondatrice de Titah.
+            Sonia Ben Messaoud-Chahed, fondatrice et directrice de l’agence.
           </p>
         </article>
 
         <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Hébergement</h2>
+          <h2 className="text-[28px] font-semibold">Conception et réalisation</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Le site est hébergé par Vercel Inc.<br />
-            440 N Barranca Ave #4133, Covina, CA 91723, États-Unis<br />
-            <a className="underline" href="https://vercel.com" target="_blank" rel="noreferrer">
-              https://vercel.com
-            </a>
+            Rédaction&nbsp;: Titah<br />
+            Conception et développement&nbsp;: Titah<br />
+            Charte graphique&nbsp;: Laetitia Martin – <a className="underline" href="mailto:laetmartin@gmail.com">laetmartin@gmail.com</a>
+          </p>
+        </article>
+
+        <article className="space-y-4">
+          <h2 className="text-[28px] font-semibold">Crédits</h2>
+          <p className="text-[#44484F] leading-relaxed">
+            Images&nbsp;: AdobeStock, sauf mention contraire.<br />
+            Illustrations portraits équipe&nbsp;: Laetitia Martin.
+          </p>
+        </article>
+
+        <article className="space-y-4">
+          <h2 className="text-[28px] font-semibold">Hébergeur</h2>
+          <p className="text-[#44484F] leading-relaxed">
+            o2switch<br />
+            Chemin des Pardiaux – 63000 Clermont-Ferrand<br />
+            Tél.&nbsp;: 04&nbsp;44&nbsp;44&nbsp;60&nbsp;40
           </p>
         </article>
 
         <article className="space-y-4">
           <h2 className="text-[28px] font-semibold">Propriété intellectuelle</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Tous les contenus présents sur le site (textes, images, illustrations, maquettes, logos)
-            sont la propriété exclusive de Titah ou font l'objet d'autorisations d'utilisation.
-            Toute reproduction, représentation ou diffusion sans autorisation écrite est interdite.
+            Tous les éléments du site www.titah.fr sont protégés par le droit d’auteur,
+            la marque déposée et autres droits de propriété intellectuelle. Toute reproduction,
+            distribution, modification, adaptation, retransmission ou publication, même partielle,
+            est strictement interdite sans accord écrit de l’agence Titah.
+          </p>
+          <p className="text-[#44484F] leading-relaxed">
+            Le droit de reproduction et/ou de représentation des données du site est exclusivement
+            destiné à l’usage privé et aux seules fins de consultation personnelle et privée des
+            utilisateurs. Le droit applicable est le droit français.
           </p>
         </article>
 
         <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Responsabilité</h2>
+          <h2 className="text-[28px] font-semibold">Données personnelles</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Titah met tout en œuvre pour fournir des informations fiables et à jour. Toutefois, la
-            responsabilité de l'éditeur ne saurait être engagée en cas d'erreur ou d'omission.
-            Le site peut contenir des liens vers des ressources externes&nbsp;; Titah n'est pas
-            responsable du contenu publié sur ces sites tiers.
+            Nous respectons la vie privée de nos utilisateurs et protégeons les données collectées
+            (nom, e-mail, adresse IP). Elles servent uniquement à fournir les services demandés et
+            améliorer l’expérience utilisateur. Elles ne sont ni vendues ni utilisées à des fins
+            publicitaires.
+          </p>
+          <p className="text-[#44484F] leading-relaxed">
+            Pour exercer vos droits d’accès, de modification ou de suppression, contactez-nous à&nbsp;
+            <a className="underline" href="mailto:welcome@titah.fr">welcome@titah.fr</a>. Nous répondrons
+            dans les meilleurs délais. En utilisant notre site, vous acceptez notre politique de confidentialité.
           </p>
         </article>
 
         <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Contact</h2>
+          <h2 className="text-[28px] font-semibold">Cookies et liens hypertextes</h2>
           <p className="text-[#44484F] leading-relaxed">
-            Pour toute question relative à ces mentions légales ou au site Titah.fr,
-            vous pouvez nous écrire à&nbsp;: <a className="underline" href="mailto:welcome@titah.fr">welcome@titah.fr</a>.
+            Le site www.titah.fr contient des liens vers d’autres sites. Titah n’exerce aucun contrôle sur ces
+            ressources externes et décline toute responsabilité quant à leur contenu.
+          </p>
+          <p className="text-[#44484F] leading-relaxed">
+            Nous utilisons des cookies de session et persistants pour faciliter la navigation et améliorer le site.
+            Vous pouvez les désactiver via les paramètres de votre navigateur, mais certaines fonctionnalités
+            pourraient alors être limitées. En continuant à utiliser le site, vous acceptez l’usage de cookies
+            conformément à notre politique dédiée.
           </p>
         </article>
       </section>
