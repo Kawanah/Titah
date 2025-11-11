@@ -1,4 +1,4 @@
-import imgImageExempleDeSiteWebLeGiteDesLavandes from "figma:asset/79b21271c1d487fae19aa4ff104956affdcd126d.png";
+import imgExperience15Ans from "../../assets/15 ans experience.webp";
 import { GradientBackground } from '../shared/GradientBackground';
 import { SECTION_PADDING } from '../../utils/constants';
 import { NavigationProps } from '../../utils/types';
@@ -33,9 +33,9 @@ export function PourquoiTitahSection({ onNavigate }: NavigationProps) {
           
           <div className="relative order-first lg:order-last">
             <img 
-              src={imgImageExempleDeSiteWebLeGiteDesLavandes} 
-              alt="Exemple de site web" 
-              className="w-full h-auto rounded-lg"
+              src={imgExperience15Ans} 
+              alt="+15 ans d'expérience" 
+              className="w-full h-auto rounded-lg object-cover"
             />
           </div>
         </div>
