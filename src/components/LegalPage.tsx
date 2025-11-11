@@ -14,7 +14,7 @@ export function LegalPage() {
               Mentions légales
             </span>
           </h1>
-          <p className="text-[#717182] text-lg">
+          <p className="text-[#717182] text-lg mt-2">
             Dernière mise à jour&nbsp;: 15 novembre 2025
           </p>
         </div>
@@ -22,7 +22,7 @@ export function LegalPage() {
 
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12 text-[#1B1C1E]">
         <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Éditeur</h2>
+          <h2 className="text-[28px] font-bold">Éditeur</h2>
           <p className="text-[#44484F] leading-relaxed">
             <strong>www.titah.fr</strong> est le site officiel de l’agence Titah.<br />
             SAS au capital de 1&nbsp;000&nbsp;€<br />
@@ -33,15 +33,15 @@ export function LegalPage() {
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Directrice de la publication</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Directrice de la publication</h2>
           <p className="text-[#44484F] leading-relaxed">
             Sonia Ben Messaoud-Chahed, fondatrice et directrice de l’agence.
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Conception et réalisation</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Conception et réalisation</h2>
           <p className="text-[#44484F] leading-relaxed">
             Rédaction&nbsp;: Titah<br />
             Conception et développement&nbsp;: Titah<br />
@@ -49,16 +49,16 @@ export function LegalPage() {
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Crédits</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Crédits</h2>
           <p className="text-[#44484F] leading-relaxed">
             Images&nbsp;: AdobeStock, sauf mention contraire.<br />
             Illustrations portraits équipe&nbsp;: Laetitia Martin.
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Hébergeur</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Hébergeur</h2>
           <p className="text-[#44484F] leading-relaxed">
             o2switch<br />
             Chemin des Pardiaux – 63000 Clermont-Ferrand<br />
@@ -66,8 +66,8 @@ export function LegalPage() {
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Propriété intellectuelle</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Propriété intellectuelle</h2>
           <p className="text-[#44484F] leading-relaxed">
             Tous les éléments du site www.titah.fr sont protégés par le droit d’auteur,
             la marque déposée et autres droits de propriété intellectuelle. Toute reproduction,
@@ -81,8 +81,8 @@ export function LegalPage() {
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Données personnelles</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Données personnelles</h2>
           <p className="text-[#44484F] leading-relaxed">
             Nous respectons la vie privée de nos utilisateurs et protégeons les données collectées
             (nom, e-mail, adresse IP). Elles servent uniquement à fournir les services demandés et
@@ -96,8 +96,8 @@ export function LegalPage() {
           </p>
         </article>
 
-        <article className="space-y-4">
-          <h2 className="text-[28px] font-semibold">Cookies et liens hypertextes</h2>
+        <article className="space-y-4 pt-4">
+          <h2 className="text-[28px] font-bold">Cookies et liens hypertextes</h2>
           <p className="text-[#44484F] leading-relaxed">
             Le site www.titah.fr contient des liens vers d’autres sites. Titah n’exerce aucun contrôle sur ces
             ressources externes et décline toute responsabilité quant à leur contenu.
