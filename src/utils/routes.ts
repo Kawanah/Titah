@@ -8,6 +8,7 @@ export const ROUTES = {
   ABOUT: 'about',
   MODELS: 'models',
   OFFERS: 'offers',
+  LEGAL: 'legal',
   FAQ: 'faq',
   CONTACT: 'contact',
   PRIVACY: 'privacy',

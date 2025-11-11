@@ -6,6 +6,7 @@ import { FAQPage } from './FAQPage';
 import { ContactPage } from './ContactPage';
 import { PrivacyPage } from './PrivacyPage';
 import { CookiesPage } from './CookiesPage';
+import { LegalPage } from './LegalPage';
 import { ROUTES, Route, getDefaultRoute } from '../utils/routes';
 
 interface RouterProps {
@@ -31,6 +32,9 @@ export function Router({ currentRoute, onNavigate }: RouterProps) {
     
     case ROUTES.FAQ:
       return <FAQPage onNavigate={onNavigate} />;
+    
+    case ROUTES.LEGAL:
+      return <LegalPage />;
     
     case ROUTES.CONTACT:
       return <ContactPage />;

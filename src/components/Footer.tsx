@@ -103,7 +103,11 @@ export function Footer({ onNavigate }: FooterProps) {
             <h3 className="font-bold text-[#1b1c1e] mb-4 text-base sm:text-lg">Informations légales</h3>
             <ul className="space-y-2 text-[#4a5565] text-sm sm:text-base">
               <li>
-                <a href="#" className="hover:text-[#9b3eff] transition-colors">
+                <a
+                  href="#"
+                  onClick={handleNavClick('legal')}
+                  className="hover:text-[#9b3eff] transition-colors"
+                >
                   Mentions légales
                 </a>
               </li>
