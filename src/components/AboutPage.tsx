@@ -310,7 +310,7 @@ function KawanahBannerSection() {
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
             <div className="order-2 lg:order-1 w-full flex flex-col gap-6 text-[#1b1c1e]">
               <div className="space-y-5 text-[16px] leading-[24px]">
-                <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
+                <p>joirtjgio En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
                 <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
               </div>
 
