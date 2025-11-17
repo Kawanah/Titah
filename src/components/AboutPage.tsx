@@ -302,13 +302,13 @@ function KawanahBannerSection() {
     <div className={`bg-[#f7f7f9] ${SECTION_PADDING.large}`}>
       <div className="max-w-[1200px] mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
         <div className="flex flex-col gap-10">
-          <h2 className="text-[42px] sm:text-[38px] lg:text-[45px] leading-[1.1]" style={{ fontWeight: 700 }}>
+          <h2 className="text-center md:text-left text-[52px] sm:text-[60px] lg:text-[64px] leading-[1.05]" style={{ fontWeight: 700 }}>
             <span>Ce que nous </span>
             <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
           </h2>
 
-          <div className="grid grid-cols-2 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
-            <div className="w-full flex flex-col gap-6 text-[#1b1c1e]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(0,694px)_minmax(0,1fr)] gap-10 lg:gap-[48px] items-start">
+            <div className="order-2 md:order-1 lg:order-1 w-full flex flex-col gap-6 text-[#1b1c1e]">
               <div className="space-y-5 text-[16px] leading-[24px]">
                 <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
                 <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
@@ -337,7 +337,7 @@ function KawanahBannerSection() {
               </div>
             </div>
 
-            <div className="w-full flex justify-center lg:justify-end">
+            <div className="order-1 md:order-2 lg:order-2 w-full flex justify-center lg:justify-end">
               <img
                 src={visuelGlobale}
                 alt="Aperçu de la plateforme Kawanah"
