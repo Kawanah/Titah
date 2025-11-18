@@ -7,7 +7,6 @@ import { HeroBadge } from './shared/HeroBadge';
 import { GradientBackground } from './shared/GradientBackground';
 import { CONTAINER_CLASSES, SECTION_PADDING } from '../utils/constants';
 import { NavigationProps } from '../utils/types';
-import { BadgeSection } from './home/BadgeSection';
 import { KawanahBannerSection as HomeKawanahBannerSection } from './home/KawanahBannerSection';
 
 function HeroSection() {
@@ -359,7 +358,6 @@ export function AboutPage({ onNavigate }: NavigationProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <HeroSection />
-      <BadgeSection />
       <HomeKawanahBannerSection />
       <QuiNousSommesSection onNavigate={onNavigate} />
       <NotreEquipeSection />
