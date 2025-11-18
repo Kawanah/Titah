@@ -301,47 +301,51 @@ function KawanahBannerSection() {
   return (
     <div className={`bg-[#f7f7f9] ${SECTION_PADDING.large}`}>
       <div className="max-w-[1200px] mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-10 lg:gap-[48px] items-start">
-          <h2 className="lg:col-span-2 text-center md:text-left text-[58px] sm:text-[68px] lg:text-[76px] leading-[1.05]" style={{ fontWeight: 700 }}>
+        <div className="space-y-12">
+          <h2 className="text-left text-[38px] sm:text-[46px] lg:text-[50px] leading-tight font-bold lg:whitespace-nowrap">
             <span>Ce que nous </span>
             <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
           </h2>
 
-          <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 text-[#1b1c1e]">
-            <div className="space-y-5 text-[16px] leading-[24px]">
-              <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
-              <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[48px] items-center mt-4">
+            <div className="order-2 lg:order-1 space-y-8 text-[#1b1c1e]">
+              <div className="space-y-6 text-[16px] leading-[24px]">
+                <div className="space-y-5">
+                  <p>En parallèle de notre activité au sein de Titah, nous continuons à faire évoluer Kawanah, notre solution SaaS tout-en-un dédiée à l'hospitalité.</p>
+                  <p>Elle aide les hébergeur·euse·s à centraliser la gestion de leurs services et activités, souvent dispersée, manuelle et chronophage.</p>
+                </div>
 
-            <div>
-              <p className="text-[16px] leading-[24px]">Objectifs :</p>
-              <div className="space-y-3 mb-1">
-                {goals.map((goal) => (
-                  <GoalBullet key={goal} label={goal} />
-                ))}
+                <div>
+                  <p className="font-semibold mb-3">Objectifs :</p>
+                  <div className="space-y-3 mb-1">
+                    {goals.map((goal) => (
+                      <GoalBullet key={goal} label={goal} />
+                    ))}
+                  </div>
+                </div>
+
+                <p className="font-bold leading-[20px]">
+                  STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <button className="w-full sm:w-auto min-w-[240px] bg-gradient-to-r from-[#9b3eff] to-[#ff6900] text-white px-5 py-2 rounded-[5px] text-[15px] font-semibold shadow-[0px_4px_20px_rgba(155,62,255,0.3)] border border-white transition-transform duration-300 hover:-translate-y-0.5">
+                    Offre spéciale pour nos client·e·s
+                  </button>
+                  <button className="w-full sm:w-auto min-w-[240px] text-[#9b3eff] px-5 py-2 rounded-[5px] border-2 border-[#9b3eff] text-[15px] font-semibold bg-white/50 transition-transform duration-300 hover:-translate-y-0.5">
+                    Accéder à l'offre spéciale Titah
+                  </button>
+                </div>
               </div>
             </div>
 
-            <p className="text-[16px] leading-[7px] font-bold">
-              STATION F, le plus grand campus de startups au monde, nous accompagne dans le développement et la structuration de Kawanah.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="w-full sm:w-auto min-w-[240px] bg-gradient-to-r from-[#9b3eff] to-[#ff6900] text-white px-5 py-2 rounded-[5px] text-[15px] font-semibold shadow-[0px_4px_20px_rgba(155,62,255,0.3)] border border-white transition-transform duration-300 hover:-translate-y-0.5">
-                Offre spéciale pour nos client·e·s
-              </button>
-              <button className="w-full sm:w-auto min-w-[240px] text-[#9b3eff] px-5 py-2 rounded-[5px] border-2 border-[#9b3eff] text-[15px] font-semibold bg-white/50 transition-transform duration-300 hover:-translate-y-0.5">
-                Accéder à l'offre spéciale Titah
-              </button>
+            <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end">
+              <img
+                src={visuelGlobale}
+                alt="Aperçu de la plateforme Kawanah"
+                className="w-full max-w-[640px]"
+              />
             </div>
-          </div>
-
-          <div className="w-full flex justify-center lg:justify-end">
-            <img
-              src={visuelGlobale}
-              alt="Aperçu de la plateforme Kawanah"
-              className="w-full max-w-[640px]"
-            />
           </div>
         </div>
       </div>
