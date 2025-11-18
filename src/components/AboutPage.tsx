@@ -302,7 +302,7 @@ function KawanahBannerSection() {
     <div className={`bg-[#f7f7f9] ${SECTION_PADDING.large}`}>
       <div className="max-w-[1200px] mx-auto w-full px-6 sm:px-10 lg:px-[79px]">
         <div className="space-y-12">
-          <h2 className="text-left text-[52px] sm:text-[60px] lg:text-[64px] leading-tight font-bold lg:whitespace-nowrap">
+          <h2 className="text-left text-[38px] sm:text-[46px] lg:text-[50px] leading-tight font-bold lg:whitespace-nowrap">
             <span>Ce que nous </span>
             <span className="bg-gradient-to-r from-[#9b3eff] to-[#ff6900] bg-clip-text text-transparent">développons pour vous</span>
           </h2>
