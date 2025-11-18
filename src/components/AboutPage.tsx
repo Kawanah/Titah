@@ -1,4 +1,4 @@
-import { Laptop, Layers, Rocket, Smartphone, Palette, Users, TrendingUp, Award, Sparkles, Package } from 'lucide-react';
+import { Laptop, Layers, Rocket, Smartphone, Palette, Users, TrendingUp, Award, Sparkles, Package, CalendarDays, Star, Zap } from 'lucide-react';
 import imgKawanahStationF from "figma:asset/1c1ecca7c133c22cf4a15d0a0c26d1e6fb93df00.png";
 import imgPortraitSonia from "figma:asset/4972d086d3cc9b4323dee58218ab3efaf152d172.png";
 import imgPortraitLaetitia from "figma:asset/03c76274f53f49d1a50ab139df4f1dbabfe50089.png";
@@ -31,6 +31,45 @@ function HeroSection() {
         </div>
       </div>
     </GradientBackground>
+  );
+}
+
+function AvailabilityBannerSection() {
+  return (
+    <div className="bg-white py-10 sm:py-12">
+      <div className="max-w-[960px] mx-auto px-4 sm:px-6">
+        <div className="bg-[#9b3eff] rounded-[20px] px-6 py-8 sm:px-10 sm:py-12 text-center text-white">
+          <div className="flex justify-center mb-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/90 px-4 py-1 text-xs sm:text-sm font-medium text-[#9b3eff]">
+              <CalendarDays className="w-4 h-4" />
+              <span>Bientôt disponible</span>
+            </div>
+          </div>
+          <p className="text-base sm:text-lg leading-relaxed font-semibold max-w-[560px] mx-auto">
+            Notre application Kawanah pour simplifier la gestion de vos services et enrichir l'expérience client.
+          </p>
+        </div>
+
+        <div className="relative -mt-8 sm:-mt-10 flex justify-center">
+          <div className="bg-white rounded-[22px] border border-[#f2f4f7] shadow-[0px_20px_60px_rgba(22,27,45,0.12)] px-6 py-5 sm:px-8 sm:py-6 text-center w-full max-w-[420px]">
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-[#f2994a] font-semibold flex items-center justify-center gap-2 mb-2">
+              <Star className="w-4 h-4 text-[#f2994a]" />
+              Sélectionnée round 1
+              <Star className="w-4 h-4 text-[#f2994a]" />
+            </p>
+            <div className="flex items-center justify-center gap-2 text-[#1b1c1e] mb-1">
+              <Rocket className="w-4 h-4 text-[#9b3eff]" />
+              <p className="text-lg sm:text-xl font-semibold">Fighters Program 2025</p>
+            </div>
+            <p className="text-sm text-[#5c6472] mb-1">by STATION F</p>
+            <p className="text-xs text-[#9b3eff] flex items-center justify-center gap-1">
+              <Zap className="w-4 h-4" />
+              powered by TikTok
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -357,6 +396,7 @@ export function AboutPage({ onNavigate }: NavigationProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <HeroSection />
+      <AvailabilityBannerSection />
       <QuiNousSommesSection onNavigate={onNavigate} />
       <NotreEquipeSection />
       <PourquoiChoisirSection />
